@@ -640,104 +640,163 @@ function ConfigurationPanel() {
       case 'Size':
         return Array.from({ length: 8 }, (_, i) => `Size ${i + 1}`)
       // Form & Fit - Material & Structure categories
-      case 'Structural Base':
+      case 'Base':
         return [
-          'Nappa', 'Patent', 'Suede', 'Nubuck', 'Saffiano', 'Metallic-fused', 'Vegan', 'Satin-finish composite',
-          'Smooth calfskin', 'Embossed', 'Aniline', 'Mirror leather', 'Crocodile print', 'Snakeskin effect',
-          'Pearlized', 'Lacquered', 'Arch height', 'Overall balance', 'Silhouette proportion', 'Heel–toe equilibrium',
-          'Standard weight', 'Lightweight', 'Ultralight', 'Internal linings', 'Counter strength', 'Metal shank',
-          'Carbon shank', 'Bamboo shank', 'Sole frame integrity', 'Torsion resistance', 'Core integrity layer'
+          // Material Families - Leather & Leather-Equivalent Types
+          'Nappa', 'Calfskin', 'Patent', 'Suede', 'Nubuck', 'Saffiano', 'Aniline', 'Metallic',
+          'Mirror', 'Pearlized', 'Lacquered', 'Croc', 'Snakeskin',
+          // Non-leather structural textiles
+          'Satin', 'Brocade', 'Technical', 'Mesh', 'Microfiber',
+          // Vegan & eco-materials
+          'Recycled', 'Bio', 'Premium', 'Eco',
+          // Base Architecture - Width Profiles
+          'Narrow', 'Regular', 'Wide',
+          // Foundational Weight & Density
+          'Standard', 'Lightweight', 'Ultralight',
+          // Structural Reinforcements - Shank Types
+          'Carbon', 'Steel', 'Bamboo', 'Composite',
+          // Heel Core Types
+          'Solid', 'Hollow', 'Lock'
         ]
-      case 'Surface Finish':
+      case 'Finish':
         return [
-          'Matte', 'Satin', 'Gloss', 'Polished', 'Metallic', 'Shimmer', 'Foil', 'Crystalline', 'Iridescent',
-          'Brushed', 'Holographic', 'Pearlized (Pearl Luster)', 'Embossed', 'Debossed', 'Etched', 'Snake pattern',
-          'Croc pattern', 'Marbled pattern', 'Gradient pattern', 'Pebble pattern', 'Crinkled pattern', 'Laser-cut',
-          '3D etched', 'Mirror', 'Ombré', 'Frosted', 'Reflective-film fusion', 'Crystalline glaze', 'Soft-touch coating'
+          // Finish Treatments (Sheen + Light Behavior)
+          'Matte', 'Soft', 'Satin', 'Semi', 'Gloss', 'Mirror',
+          'Foil', 'Brushed', 'Iridescent', 'Holographic', 'Pearlescent', 'Crystalline', 'Frosted', 'Ombré',
+          // Texture Detailing
+          'Croc', 'Snake', 'Pebble', 'Debossed', 'Laser',
+          'Etched', 'Crinkled', 'Marbled', 'Micro', 'Macro'
         ]
-      case 'Textile Layers & Overlays':
+      case 'Textiles':
         return [
-          'Mesh', 'Organza', 'Silk', 'Veils', 'Tulle', 'Lace', 'Chiffon', 'Woven base', 'Silk satin', 'Moiré',
-          'Velvet', 'Brocade foundation', 'Embroidered panels', '3D lace', 'Sequined texture', 'Gem-threaded texture',
-          'Brocade', 'Jacquard', 'Lurex-threaded microfibers', 'Contrast overlays', 'Gradient transitions',
-          'Layer merging', 'Sheer', 'Semi-opaque', 'Solid'
+          // Sheer & Decorative Layers
+          'Organza', 'Tulle', 'Chiffon', 'Lace', 'Mesh', 'Veils',
+          // Underlays & Structural Fabrics
+          'Satin', 'Moiré', 'Velvet', 'Woven', 'Technical',
+          // Decorative Textiles & Threads
+          'Jacquard', 'Lurex', 'Embroidery', 'Sequined', 'Threaded'
         ]
       case 'Hardware':
         return [
-          'Gold', 'Rose Gold', 'Platinum', 'Titanium', 'Palladium', 'Rhodium', 'Brass', 'Chrome', 'Brushed finish',
-          'Polished finish', 'Textured finish', 'Hammered finish', 'Engraved finish', 'Enamel-coated', 'Metallic ribbing',
-          'Gem-inset heel bases', 'Threaded reinforcement', 'Anchor plating', 'Filigree overlay', 'Lace-metal patterns',
-          'Micro-studding', 'Sculpted fastenings', 'Micro screws', 'Studs', 'Rivets', 'Filigree embossing', 'Mini clasp systems'
+          // Metal Families - Metal Options
+          'Gold', 'Rose', 'Platinum', 'Titanium', 'Palladium', 'Rhodium', 'Brass', 'Chrome', 'Nickel',
+          // Metal Finishes
+          'Polished', 'Brushed', 'Hammered', 'Engraved', 'Textured', 'Enamel', 'Filigree', 'Lace',
+          // Hardware Components
+          'Studs', 'Rivets', 'Screws', 'Buckles', 'Clasps'
         ]
-      case 'Material Innovation & Core Sustainability':
+      case 'Innovation':
         return [
-          'Memory textiles', 'Liquid leather', 'Reflective polymer fusion', 'Nano-flex silk', 'Smart fiber composites',
-          'Recycled fiber blends', 'Bio-resin coatings', 'Plant-based vegan leathers', 'Scratch resistance',
-          'Water repellency', 'Fade control', 'Tarnish control', 'Standard water resistance', 'Water-resistant',
-          'Hydro-shield sealed (fully waterproof)'
+          // Innovation Materials
+          'Memory', 'Liquid', 'Nano', 'Reflective', 'Bio', 'Thermoregulators',
+          // Durability Enhancements
+          'Resistant', 'Protected', 'Stable', 'Durable', 'Reinforced',
+          // Sustainability Features
+          'Recycled', 'Sustainable', 'Repairable', 'Certified',
+          // Water Resistance Levels
+          'Standard', 'Resistant', 'Shield', 'Waterproof'
         ]
       // Form & Fit - Design & Sculpt categories
       case 'Structure & Silhouette':
         return [
-          'Stiletto', 'Block', 'Platform', 'Wedge', 'Flat', 'Fluted', 'Split', 'Sculpted heel', 'Hybrid art form',
-          'Proportion', 'Stance', 'Spatial flow', 'Weight distribution', 'Platformed', 'Non-platform base',
-          'Open formation', 'Closed formation', 'Asymmetric geometry', 'Cut-out geometry', 'Classic (Standard) arch',
-          'Elevated (High) arch', 'Ultra Elevated arch', 'Ergonomic arch', 'Kinetic-Flex (Adaptive) arch'
+          'Stiletto', 'Block', 'Platform', 'Wedge', 'Flat', 'Fluted heel', 'Split heel', 'Sculpted heel', 'Hybrid art form',
+          'Proportion', 'Stance', 'Spatial flow', 'Weight distribution', 'Heel-to-toe ratio guidelines', 'Toe exposure percentage ranges',
+          'Upper coverage index', 'Visual center-of-gravity mapping', 'Heel–toe ratio', 'Exposure ratios', 'Ergonomic equilibrium',
+          'Platform toggle - On', 'Platform toggle - Off', 'Platform depth vs visual elongation metrics', 'Upper structure - Open',
+          'Upper structure - Closed', 'Asymmetry options', 'Cut-out pattern/geometry library', 'Arch Profile - Classic (standard)',
+          'Arch Profile - Elevated (high)', 'Arch Profile - Ultra-elevated', 'Arch Profile - Ergonomic', 'Arch Profile - Kinetic-Flex (adaptive)',
+          'Balance Calibration', 'Contour & Silhouette - Streamlined', 'Contour & Silhouette - Architectural', 'Contour & Silhouette - Flowing',
+          'Contour & Silhouette - Corseted', 'Dynamic Motion Geometry', 'Curvature lines', 'Movement sculpted into stillness'
         ]
       case 'Sculptural Design':
         return [
-          'Pointed toe', 'Almond toe', 'Round toe', 'Square toe', 'Peep toe', 'Sculpted Asymmetry toe',
-          'Geometric heel', 'Organic heel', 'Faceted heel', 'Twisted heel', 'Spool heel', 'Curved heel',
-          'Crystal block heel', 'Split heel', 'Motif heel', 'Clean edge', 'Folded edge', 'Waved edge',
-          'Contoured edge', 'Draped folds', 'Embossed contours', 'Volumetric shaping', 'Corseted structures',
-          'Single band strap', 'Crossover strap', 'Lace-up strap', 'Wraparound strap', 'Open form strap'
+          'Pointed (commanding)', 'Almond (elegant)', 'Round (soft)', 'Square (assertive)', 'Peep (playful)',
+          'Sculpted Asymmetry (avant-garde)', 'Toe length parameters', 'Toe taper parameters', 'Geometric blocks (angular/cut precision)',
+          'Spools', 'Curved (grace flow)', 'Crystal blocks', 'Faceted/Jewel-like (light-reactive planes)', 'Organic (fluid)', 'Split',
+          'Twisted/kinetic tension', 'Artistic motif heels (statement)', 'Heel height presets (cm)', 'Clean edges (precision)',
+          'Folded/plissé edges (architectural/tactile depth)', 'Waved contours (motion continuity/rhythmic)', 'Draped (textural fluidity)',
+          'Contoured ergonomic lines (body-synced refinement)', 'Transition morphologies with radius settings', 'Draping folds',
+          'Embossed ribs', 'Layered wraps', 'Kinetic flutes', 'Sculpted ribs', 'Volume depth controls', 'Relief Carving',
+          'Subtle recesses', 'Raised motifs', 'Ankle Strap - Single', 'Ankle Strap - Multi-wrap', 'Ankle Strap - Cuff',
+          'Instep / Mid Strap', 'Toe Strap', 'T-Strap', 'Slingback', 'Crossover/Criss-Cross', 'Wraparound', 'Lace-Up',
+          'Harness/Cage', 'Mary-Jane', 'Decorative Cascade', 'Articulation Zones', 'Strap width - Micro (1–6mm)',
+          'Strap width - Narrow (7–12mm)', 'Strap width - Medium (13–20mm)', 'Strap width - Wide (21–40mm+)',
+          'Padded straps', 'Reinforced straps', 'Elasticated straps', 'Adjustable (buckles/sliders)', 'Magnetic quick-release',
+          'Interchangeable strap modules', 'Piped edge', 'Rolled edge', 'Raw edge', 'Topstitch', 'Invisible stitch', 'Studded',
+          'Perforated', 'Laser pattern', 'Load-bearing strap', 'Adjustive strap', 'Decorative strap', 'Hybrid strap',
+          'Heel-to-Toe Dialogue'
         ]
       case 'Design Harmony':
         return [
-          'Lightness', 'Solidity', 'Flow line continuity', 'Edge transitions', 'Seam transitions', 'Silhouette transitions',
-          'Material–Geometry contrast', 'Material–Geometry fusion', 'Gradient continuity', 'Perfect symmetry',
-          'Intentional imbalance', 'Asymmetric artform', 'Heel–toe ratio', 'Exposure ratios', 'Ergonomic equilibrium',
-          'Dynamic motion geometry', 'Curvature lines', 'Movement sculpted into stillness', 'Iconic Silhouette Identifier'
+          'Visual Weight - Lightness', 'Visual Weight - Solidity', 'Flow continuity', 'Flow lock toggle', 'Edge transitions',
+          'Seam transitions', 'Silhouette transitions', 'Continuous line from toe → arch → heel', 'Seamless transitions from toe to heel',
+          'Uninterrupted visual rhythm', 'Material–Geometry blending rule sets', 'Satin + folded edge combo', 'Patent + clean edge combo',
+          'Material–Geometry contrast', 'Material–Geometry fusion', 'Gradient continuity', 'Soft leather + metallic precision',
+          'Matte suede against mirror gloss', 'Silk overlays over structured bases', 'Symmetry - Perfect balance',
+          'Symmetry - Intentional tension', 'Perfect symmetry', 'Intentional asymmetry presets', 'Iconic Silhouette Identifier',
+          'Signature Divatude outline', 'Recognizable sculptural gesture', 'Saved silhouettes (brand signatures)',
+          'Transition Morphology', 'Sharp angular seams', 'Rolled transitions', 'Melted curves', 'Line Emotion',
+          'Linear tension for confidence', 'Soft arcs for romance', 'Interwoven curves for modern sensuality',
+          'Harmony Check feedback overlay'
         ]
       // Form & Fit - Function & Detailing categories
-      case 'Functional Attributes':
+      case 'Function':
         return [
-          'Soft-core cushioning', 'Gel cushioning', 'Hybrid foam', 'Memory insole', 'Air-padded', 'Padded',
-          'Ultra-soft memory foam', 'Firm support', 'Hybrid blend', 'Rigid flexibility', 'Semi-flex',
-          'Dynamic-flex architecture', 'Standard weight', 'Lightweight build', 'Ultralight build', 'Breathable',
-          'Moisture-wicking', 'Heated core', 'Ventilated mesh', 'Thermoregulated insole', 'Straps adjustability',
-          'Hidden elastic zones', 'Concealed stretch integration', 'Adaptive closures', 'Base padding',
-          'Spring-reactive', 'Adaptive motion base', 'Kinetic cushioning core'
+          // Cushioning & Support
+          'Memory', 'Gel', 'Hybrid', 'Air', 'Padded', 'Firm',
+          // Flexibility
+          'Rigid', 'Semi', 'Dynamic', 'Flex',
+          // Weight Options
+          'Standard', 'Lightweight', 'Ultralight',
+          // Comfort Features
+          'Breathable', 'Wicking', 'Thermoregulated', 'Heated',
+          // Closure Systems
+          'Elastic', 'Buckle', 'Stretch', 'Modular', 'Adaptive'
         ]
-      case 'Ergonomic Intelligence':
+      case 'Ergonomic':
         return [
-          'Pressure zone mapping', 'Arch contour sculpting', 'Insole curvature harmony', 'Weighted heel base',
-          'Balance-lock stabilizers', 'Step alignment calibration', 'Energy return zones', 'Flex-line articulation',
-          'Heel-to-toe flow architecture'
+          // Fit Options
+          'Tight', 'Classic', 'Relaxed',
+          // Support Features
+          'Contour', 'Arch', 'Balance', 'Alignment',
+          // Stabilization
+          'Lock', 'Weighted', 'Stabilization'
         ]
-      case 'Craft Detailing':
+      case 'Craft':
         return [
-          'Invisible stitching', 'Contrast stitching', 'Sculpted stitching', 'Hand-finished stitching', 'Signature threadwork',
-          'Piped edging', 'Rolled edging', 'Bound edging', 'Polished edging', 'Jewelled edging', 'Raw edging',
-          'Micro-trimmed edging', 'Metallic trims', 'Gem insets', 'Contoured overlays', 'Dual-surface borders',
-          'Embossed branding', 'Engraved branding', 'Monogrammed branding', 'Crystal-studded logo', 'Embedded gem mark',
-          'Gem-lined insignia', 'Craft Signature System'
+          // Stitching Styles
+          'Invisible', 'Contrast', 'Sculpted', 'Signature',
+          // Edge Treatments
+          'Piped', 'Rolled', 'Bound', 'Raw', 'Jewelled', 'Polished',
+          // Decorative Elements
+          'Metallic', 'Gem', 'Applique', 'Layered', 'Embroidery',
+          'Monogram', 'Engraved', 'Crystal', 'Embedded', 'Stamp',
+          // Hardware Details
+          'Studs', 'Rivets', 'Filigree'
         ]
-      case 'Sole & Underside Detailing':
+      case 'Sole':
         return [
-          'Matte sole', 'Gloss sole', 'Textured sole', 'Rubberized sole', 'Embossed sole', 'Engraved sole (cultural motifs)',
-          'Engraved sole (geometric motifs)', 'Marbled sole', 'Weighted heel core', 'Balance-lock base',
-          'Patterned grip engraving', 'Rubberized insets', 'Sculpted underfoot geometry'
+          // Sole Materials & Finishes
+          'Matte', 'Gloss', 'Textured', 'Rubberized', 'Leather', 'Marbled',
+          // Sole Details
+          'Engraved', 'Sculpted', 'Patterned', 'Rubber',
+          // Functional Features
+          'Shock', 'Modular', 'Replaceable'
         ]
-      case 'Longevity & Care Design':
+      case 'Care':
         return [
-          'Wear resistance', 'Scratch-proof layering', 'Reinforced edges', 'Replaceable soles', 'Repairable gem bases',
-          'Adjustable components', 'Long-wear assurance', 'Anti-aging coatings', 'Recycled-core options'
+          // Durability Features
+          'Resistant', 'Protected', 'Reinforced', 'Waterproof',
+          // Modularity
+          'Modular', 'Replaceable', 'Repairable',
+          // Sustainability
+          'Sustainable', 'Recyclable', 'Recycled'
         ]
       default:
         return []
     }
   }
+
 
   // Dynamic categories based on active feature
   const getCategories = () => {
@@ -754,11 +813,11 @@ function ConfigurationPanel() {
         return ['Pattern', 'Flow', 'Direction']
       // Form & Fit categories
       case 'Material & Structure':
-        return ['Structural Base', 'Surface Finish', 'Textile Layers & Overlays', 'Hardware', 'Material Innovation & Core Sustainability']
+        return ['Base', 'Finish', 'Textiles', 'Hardware', 'Innovation']
       case 'Design & Sculpt':
         return ['Structure & Silhouette', 'Sculptural Design', 'Design Harmony']
       case 'Function & Detailing':
-        return ['Functional Attributes', 'Ergonomic Intelligence', 'Craft Detailing', 'Sole & Underside Detailing', 'Longevity & Care Design']
+        return ['Function', 'Ergonomic', 'Craft', 'Sole', 'Care']
       default:
         return ['Precious', 'Semi-Precious', 'Organic Gems', 'Man-Made', 'Extended Natural', 'Colour Families', 'Textures', 'Special Effects']
     }
@@ -799,11 +858,11 @@ function ConfigurationPanel() {
         case 'Cascade':
           return ['Pattern', 'Flow', 'Direction']
         case 'Material & Structure':
-          return ['Structural Base', 'Surface Finish', 'Textile Layers & Overlays', 'Hardware', 'Material Innovation & Core Sustainability']
+          return ['Base', 'Finish', 'Textiles', 'Hardware', 'Innovation']
         case 'Design & Sculpt':
           return ['Structure & Silhouette', 'Sculptural Design', 'Design Harmony']
         case 'Function & Detailing':
-          return ['Functional Attributes', 'Ergonomic Intelligence', 'Craft Detailing', 'Sole & Underside Detailing', 'Longevity & Care Design']
+          return ['Function', 'Ergonomic', 'Craft', 'Sole', 'Care']
         default:
           return ['Precious', 'Semi-Precious', 'Organic Gems', 'Man-Made', 'Extended Natural', 'Colour Families', 'Textures', 'Special Effects']
       }
@@ -823,7 +882,7 @@ function ConfigurationPanel() {
     setSelectedGridItem(null)
     if (tab === 'Form & Fit') {
       setActiveFeature('Material & Structure')
-      setActiveCategory('Structural Base')
+      setActiveCategory('Base')
     } else {
       setActiveFeature('Gems')
       setActiveCategory('Precious')
