@@ -1,0 +1,1539 @@
+.configuration-panel {
+  width: 35%;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 16px;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Top Navigation Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  justify-content: space-around;
+  border: 0.2px solid #44444470;
+  border-radius: 18px;
+  padding: 5px 16px;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.tabs::before {
+  display: none;
+}
+
+.tab {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 6px 10px;
+  position: relative;
+  transition: color 0.2s;
+  font-family: 'Bodoni Moda', serif;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+
+.tab:hover {
+  color: #fff;
+}
+
+.tab.active {
+  color: #fff;
+  font-weight: 400;
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5.2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(50% + 10px);
+  height: 1px;
+  background: linear-gradient(to right, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.3) 10%,
+    #533e17 15%, 
+    #533e17 20%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    #533e17 80%,
+    #533e17 85%,
+    rgba(83, 62, 23, 0.3) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+/* Main Feature Selection */
+.feature-selection {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Form Feature Tabs - styled like main tabs */
+.form-feature-tabs {
+  display: flex;
+  gap: 0;
+  justify-content: space-around;
+  border: 0.2px solid #44444470;
+  border-radius: 18px;
+  padding: 5px 16px;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.form-feature-tab {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 6px 10px;
+  position: relative;
+  transition: color 0.2s;
+  font-family: 'Bodoni Moda', serif;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.form-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.form-feature-tab:hover {
+  color: #fff;
+}
+
+.form-feature-tab.active {
+  color: #fff;
+  font-weight: 400;
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.form-feature-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5.2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(50% + 10px);
+  height: 1px;
+  background: linear-gradient(to right, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.3) 10%,
+    #533e17 15%, 
+    #533e17 20%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    #533e17 80%,
+    #533e17 85%,
+    rgba(83, 62, 23, 0.3) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.crown-cascade-card {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  overflow: visible;
+  align-self: stretch;
+  min-height: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.crown-cascade-card.active {
+  border: 0.2px solid #44444475;
+  position: relative;
+}
+
+.crown-cascade-card.active::after {
+  display: none;
+}
+
+.crown-cascade-tabs {
+  display: flex;
+  gap: 12px;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+.crown-cascade-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 12px;
+  position: relative;
+  color: #fff;
+}
+
+.crown-cascade-tab .feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.crown-cascade-tab .feature-label {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Bodoni Moda', serif;
+  transition: color 0.2s, text-shadow 0.2s;
+  margin-top: auto;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.crown-cascade-tab.active .feature-label {
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.crown-cascade-tab.active {
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.crown-cascade-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(50% + 10px);
+  height: 1px;
+  background: linear-gradient(to right, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.3) 10%,
+    #533e17 15%, 
+    #533e17 20%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    #533e17 80%,
+    #533e17 85%,
+    rgba(83, 62, 23, 0.3) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  z-index: 3;
+  box-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.feature-card {
+  flex: 1;
+  display: flex;
+  position: relative;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  overflow: visible;
+  aspect-ratio: 1;
+  transition: transform 0.3s ease;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+}
+
+.feature-card.active {
+  border: none;
+  position: relative;
+  overflow: visible;
+}
+
+@keyframes rotateGradient {
+  0% { background: linear-gradient(135deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  2.27% { background: linear-gradient(143deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  4.55% { background: linear-gradient(151deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  6.82% { background: linear-gradient(159deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  9.09% { background: linear-gradient(167deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  11.36% { background: linear-gradient(175deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  13.64% { background: linear-gradient(183deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  15.91% { background: linear-gradient(191deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  18.18% { background: linear-gradient(199deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  20.45% { background: linear-gradient(207deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  22.73% { background: linear-gradient(215deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  25% { background: linear-gradient(223deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  27.27% { background: linear-gradient(231deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  29.55% { background: linear-gradient(239deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  31.82% { background: linear-gradient(247deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  34.09% { background: linear-gradient(255deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  36.36% { background: linear-gradient(263deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  38.64% { background: linear-gradient(271deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  40.91% { background: linear-gradient(279deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  43.18% { background: linear-gradient(287deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  45.45% { background: linear-gradient(295deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  47.73% { background: linear-gradient(303deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  50% { background: linear-gradient(311deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  52.27% { background: linear-gradient(319deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  54.55% { background: linear-gradient(327deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  56.82% { background: linear-gradient(335deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  59.09% { background: linear-gradient(343deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  61.36% { background: linear-gradient(351deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  63.64% { background: linear-gradient(359deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  65.91% { background: linear-gradient(367deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  68.18% { background: linear-gradient(375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  70.45% { background: linear-gradient(383deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  72.73% { background: linear-gradient(391deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  75% { background: linear-gradient(399deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  77.27% { background: linear-gradient(407deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  79.55% { background: linear-gradient(415deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  81.82% { background: linear-gradient(423deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  84.09% { background: linear-gradient(431deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  86.36% { background: linear-gradient(439deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  88.64% { background: linear-gradient(447deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  90.91% { background: linear-gradient(455deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  93.18% { background: linear-gradient(463deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  95.45% { background: linear-gradient(471deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  97.73% { background: linear-gradient(479deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  100% { background: linear-gradient(495deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+}
+
+@keyframes glowFade {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 254, 136, 0.8), 0 0 20px rgba(255, 254, 136, 0.6), 0 0 30px rgba(83, 62, 23, 0.5), 0 0 40px rgba(83, 62, 23, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 254, 136, 1), 0 0 30px rgba(255, 254, 136, 0.8), 0 0 45px rgba(83, 62, 23, 0.7), 0 0 60px rgba(83, 62, 23, 0.5);
+  }
+}
+
+.feature-card.active::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 10px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 1;
+  box-shadow: 0 0 10px rgba(255, 254, 136, 0.8), 0 0 20px rgba(255, 254, 136, 0.6), 0 0 30px rgba(83, 62, 23, 0.5), 0 0 40px rgba(83, 62, 23, 0.3);
+  animation: rotateGradient 8s linear infinite, glowFade 3s ease-in-out infinite;
+}
+
+
+
+
+
+
+
+
+
+.feature-card.active::after {
+  21.09375% { background: linear-gradient(210.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  21.87500% { background: linear-gradient(213.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  22.65625% { background: linear-gradient(216.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  23.43750% { background: linear-gradient(219.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  24.21875% { background: linear-gradient(222.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  25.00000% { background: linear-gradient(225.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  25.78125% { background: linear-gradient(227.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  26.56250% { background: linear-gradient(230.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  27.34375% { background: linear-gradient(233.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  28.12500% { background: linear-gradient(236.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  28.90625% { background: linear-gradient(239.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  29.68750% { background: linear-gradient(241.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  30.46875% { background: linear-gradient(244.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  31.25000% { background: linear-gradient(247.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  32.03125% { background: linear-gradient(250.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  32.81250% { background: linear-gradient(253.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  33.59375% { background: linear-gradient(255.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  34.37500% { background: linear-gradient(258.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  35.15625% { background: linear-gradient(261.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  35.93750% { background: linear-gradient(264.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  36.71875% { background: linear-gradient(267.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  37.50000% { background: linear-gradient(270.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  38.28125% { background: linear-gradient(272.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  39.06250% { background: linear-gradient(275.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  39.84375% { background: linear-gradient(278.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  40.62500% { background: linear-gradient(281.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  41.40625% { background: linear-gradient(284.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  42.18750% { background: linear-gradient(286.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  42.96875% { background: linear-gradient(289.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  43.75000% { background: linear-gradient(292.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  44.53125% { background: linear-gradient(295.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  45.31250% { background: linear-gradient(298.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  46.09375% { background: linear-gradient(300.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  46.87500% { background: linear-gradient(303.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  47.65625% { background: linear-gradient(306.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  48.43750% { background: linear-gradient(309.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  49.21875% { background: linear-gradient(312.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  50.00000% { background: linear-gradient(315.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  50.78125% { background: linear-gradient(317.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  51.56250% { background: linear-gradient(320.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  52.34375% { background: linear-gradient(323.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  53.12500% { background: linear-gradient(326.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  53.90625% { background: linear-gradient(329.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  54.68750% { background: linear-gradient(331.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  55.46875% { background: linear-gradient(334.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  56.25000% { background: linear-gradient(337.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  57.03125% { background: linear-gradient(340.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  57.81250% { background: linear-gradient(343.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  58.59375% { background: linear-gradient(345.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  59.37500% { background: linear-gradient(348.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  60.15625% { background: linear-gradient(351.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  60.93750% { background: linear-gradient(354.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  61.71875% { background: linear-gradient(357.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  62.50000% { background: linear-gradient(360.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  63.28125% { background: linear-gradient(362.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  64.06250% { background: linear-gradient(365.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  64.84375% { background: linear-gradient(368.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  65.62500% { background: linear-gradient(371.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  66.40625% { background: linear-gradient(374.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  67.18750% { background: linear-gradient(376.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  67.96875% { background: linear-gradient(379.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  68.75000% { background: linear-gradient(382.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  69.53125% { background: linear-gradient(385.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  70.31250% { background: linear-gradient(388.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  71.09375% { background: linear-gradient(390.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  71.87500% { background: linear-gradient(393.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  72.65625% { background: linear-gradient(396.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  73.43750% { background: linear-gradient(399.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  74.21875% { background: linear-gradient(402.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  75.00000% { background: linear-gradient(405.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  75.78125% { background: linear-gradient(407.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  76.56250% { background: linear-gradient(410.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  77.34375% { background: linear-gradient(413.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  78.12500% { background: linear-gradient(416.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  78.90625% { background: linear-gradient(419.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  79.68750% { background: linear-gradient(421.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  80.46875% { background: linear-gradient(424.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  81.25000% { background: linear-gradient(427.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  82.03125% { background: linear-gradient(430.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  82.81250% { background: linear-gradient(433.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  83.59375% { background: linear-gradient(435.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  84.37500% { background: linear-gradient(438.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  85.15625% { background: linear-gradient(441.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  85.93750% { background: linear-gradient(444.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  86.71875% { background: linear-gradient(447.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  87.50000% { background: linear-gradient(450.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  88.28125% { background: linear-gradient(452.81250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  89.06250% { background: linear-gradient(455.62500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  89.84375% { background: linear-gradient(458.43750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  90.62500% { background: linear-gradient(461.25000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  91.40625% { background: linear-gradient(464.06250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  92.18750% { background: linear-gradient(466.87500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  92.96875% { background: linear-gradient(469.68750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  93.75000% { background: linear-gradient(472.50000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  94.53125% { background: linear-gradient(475.31250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  95.31250% { background: linear-gradient(478.12500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  96.09375% { background: linear-gradient(480.93750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  96.87500% { background: linear-gradient(483.75000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  97.65625% { background: linear-gradient(486.56250deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  98.43750% { background: linear-gradient(489.37500deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  99.21875% { background: linear-gradient(492.18750deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  100.00000% { background: linear-gradient(495.00000deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+}
+  1.5625% { background: linear-gradient(140.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  3.125% { background: linear-gradient(146.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  4.6875% { background: linear-gradient(151.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  6.25% { background: linear-gradient(157.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  7.8125% { background: linear-gradient(163.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  9.375% { background: linear-gradient(168.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  10.9375% { background: linear-gradient(174.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  12.5% { background: linear-gradient(180deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  14.0625% { background: linear-gradient(185.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  15.625% { background: linear-gradient(191.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  17.1875% { background: linear-gradient(196.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  18.75% { background: linear-gradient(202.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  20.3125% { background: linear-gradient(208.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  21.875% { background: linear-gradient(213.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  23.4375% { background: linear-gradient(219.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  25% { background: linear-gradient(225deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  26.5625% { background: linear-gradient(230.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  28.125% { background: linear-gradient(236.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  29.6875% { background: linear-gradient(241.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  31.25% { background: linear-gradient(247.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  32.8125% { background: linear-gradient(253.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  34.375% { background: linear-gradient(258.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  35.9375% { background: linear-gradient(264.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  37.5% { background: linear-gradient(270deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  39.0625% { background: linear-gradient(275.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  40.625% { background: linear-gradient(281.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  42.1875% { background: linear-gradient(286.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  43.75% { background: linear-gradient(292.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  45.3125% { background: linear-gradient(298.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  46.875% { background: linear-gradient(303.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  48.4375% { background: linear-gradient(309.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  50% { background: linear-gradient(315deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  51.5625% { background: linear-gradient(320.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  53.125% { background: linear-gradient(326.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  54.6875% { background: linear-gradient(331.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  56.25% { background: linear-gradient(337.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  57.8125% { background: linear-gradient(343.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  59.375% { background: linear-gradient(348.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  60.9375% { background: linear-gradient(354.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  62.5% { background: linear-gradient(360deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  64.0625% { background: linear-gradient(365.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  65.625% { background: linear-gradient(371.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  67.1875% { background: linear-gradient(376.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  68.75% { background: linear-gradient(382.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  70.3125% { background: linear-gradient(388.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  71.875% { background: linear-gradient(393.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  73.4375% { background: linear-gradient(399.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  75% { background: linear-gradient(405deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  76.5625% { background: linear-gradient(410.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  78.125% { background: linear-gradient(416.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  79.6875% { background: linear-gradient(421.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  81.25% { background: linear-gradient(427.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  82.8125% { background: linear-gradient(433.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  84.375% { background: linear-gradient(438.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  85.9375% { background: linear-gradient(444.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  87.5% { background: linear-gradient(450deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  89.0625% { background: linear-gradient(455.625deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  90.625% { background: linear-gradient(461.25deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  92.1875% { background: linear-gradient(466.875deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  93.75% { background: linear-gradient(472.5deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  95.3125% { background: linear-gradient(478.125deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  96.875% { background: linear-gradient(483.75deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  98.4375% { background: linear-gradient(489.375deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+  100% { background: linear-gradient(495deg, rgba(83, 62, 23, 0) 0%, rgba(83, 62, 23, 0.4) 10%, #533e17 20%, #533e17 25%, rgba(255, 254, 136, 0.8) 30%, #fffe88 35%, #fffe88 65%, rgba(255, 254, 136, 0.8) 70%, #533e17 75%, #533e17 80%, rgba(83, 62, 23, 0.4) 90%, rgba(83, 62, 23, 0) 100%); }
+}
+
+.feature-card.active::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 10px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 1;
+  box-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+  animation: rotateGradient 8s linear infinite;
+  pointer-events: none;
+}
+
+.feature-card.active::after {
+  display: none;
+}
+
+.feature-card.active .feature-button {
+  position: relative;
+  z-index: 2;
+  background-color: transparent;
+}
+
+.feature-card.active .feature-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+.feature-card .feature-button {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  border: none;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: transparent;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.feature-card .feature-button.active::before,
+.feature-card .feature-button.active::after {
+  display: none;
+}
+
+
+.feature-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 12px;
+  position: relative;
+  z-index: 0;
+}
+
+.feature-icon,
+.feature-label {
+  position: relative;
+  z-index: 1;
+}
+
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.feature-label {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Bodoni Moda', serif;
+  transition: color 0.2s, text-shadow 0.2s;
+  margin-top: auto;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.feature-button.active .feature-label {
+  color: #fff;
+}
+
+.feature-card.active .feature-label {
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+/* Sub-Category Filters */
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  position: relative;
+}
+
+.filters-container {
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-height: 50px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.filters-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(to right, 
+    rgba(0, 0, 0, 0) 0%, 
+    rgba(0, 0, 0, 0.4) 30%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.9) 100%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.filters-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(to left, 
+    rgba(0, 0, 0, 0) 0%, 
+    rgba(0, 0, 0, 0.4) 30%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.9) 100%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.filters-container.has-more::after {
+  opacity: 1;
+}
+
+.filters-container.has-prev::before {
+  opacity: 1;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+}
+
+.filter-button {
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  border-radius: 10px;
+  padding: 10px 8px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'Bodoni Moda', serif;
+  cursor: pointer;
+  transition: all 0.2s, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  z-index: 0;
+  min-height: 36px;
+  max-height: 60px;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.filter-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+.filter-button.active > * {
+  position: relative;
+  z-index: 1;
+}
+
+.filter-button:hover {
+  border-color: #555;
+  transform: scale(1.05);
+}
+
+.filter-button.active {
+  background-color: transparent;
+  border: none;
+  position: relative;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+.filter-button.active::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 10px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 0;
+  box-shadow: 0 0 10px rgba(255, 254, 136, 0.8), 0 0 20px rgba(255, 254, 136, 0.6), 0 0 30px rgba(83, 62, 23, 0.5), 0 0 40px rgba(83, 62, 23, 0.3);
+  animation: rotateGradient 8s linear infinite, glowFade 3s ease-in-out infinite;
+}
+
+
+.filter-arrow-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.filter-arrow-button-left {
+  left: -12px;
+}
+
+.filter-arrow-button-right {
+  right: -12px;
+}
+
+.filter-arrow-icon {
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 50%,
+    #533e17 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 16px;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.filter-arrow-button:hover .filter-arrow-icon {
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 50%,
+    #533e17 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: scale(1.1);
+}
+
+.filter-arrow-button-left:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.filter-arrow-button-right:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Content Grid */
+.content-grid-section {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.content-grid-wrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  margin-top: 16px;
+}
+
+.content-grid-wrapper::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: transparent;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.content-grid-section::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, 
+    rgba(0, 0, 0, 0.9) 0%, 
+    rgba(0, 0, 0, 0.7) 40%,
+    rgba(0, 0, 0, 0.4) 70%,
+    rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 0 0 12px 12px;
+}
+
+.content-grid-section.has-more::after {
+  opacity: 1;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  align-content: start;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.content-grid.color-grid {
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  padding-bottom: 60px;
+}
+
+.grid-item {
+  aspect-ratio: 1;
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-family: 'Bodoni Moda', serif;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 8px;
+  box-sizing: border-box;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  min-width: 0;
+  max-width: 100%;
+  z-index: 1;
+}
+
+.grid-item > * {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.2;
+}
+
+.color-grid .grid-item {
+  border-radius: 8px;
+  font-size: 10px;
+  padding: 4px;
+  overflow: visible;
+}
+
+/* Remove forced row breaks - let colors flow naturally in 8-column rows */
+
+.grid-item:hover {
+  border-color: #555;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(255, 254, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  z-index: 100;
+}
+
+.grid-item.active {
+  background-color: transparent;
+  border: none;
+  position: relative;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(255, 254, 136, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  z-index: 50;
+}
+
+.grid-item.active:hover {
+  z-index: 100;
+}
+
+.grid-item.active::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 10px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 0;
+  box-shadow: 0 0 10px rgba(255, 254, 136, 0.8), 0 0 20px rgba(255, 254, 136, 0.6), 0 0 30px rgba(83, 62, 23, 0.5), 0 0 40px rgba(83, 62, 23, 0.3);
+  animation: rotateGradient 8s linear infinite, glowFade 3s ease-in-out infinite;
+}
+
+.grid-item.active > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Gem Image Styles */
+.gem-item {
+  padding: 4px;
+  overflow: hidden;
+}
+
+.gem-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #0a0a0a;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gem-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  display: block;
+  opacity: 1;
+  background-color: #0a0a0a;
+}
+
+.gem-item:hover .gem-image-container {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(255, 254, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.gem-item:hover .gem-image {
+  transform: scale(1.05);
+}
+
+.gem-name-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Bodoni Moda', serif;
+  text-align: center;
+  padding: 6px 4px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.gem-item:hover .gem-name-overlay {
+  opacity: 1;
+}
+
+.gem-name-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Bodoni Moda', serif;
+  text-align: center;
+  padding: 4px;
+  z-index: 2;
+  width: 100%;
+}
+
+.gem-item.active .gem-image-container::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  padding: 2px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 1;
+  box-shadow: 0 0 8px rgba(255, 254, 136, 0.6), 0 0 12px rgba(83, 62, 23, 0.4);
+}
+
+/* 3D Color Swatch Styles */
+.color-swatch-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.color-swatch-3d {
+  position: relative;
+  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transform: translateZ(0);
+  width: 100%;
+  height: 100%;
+}
+
+.grid-item:hover .color-swatch-3d {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(255, 254, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.grid-item.active .color-swatch-3d {
+  transform: translateY(-1px) translateZ(0);
+}
+
+.color-name-overlay {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Bodoni Moda', serif;
+  text-align: center;
+  padding: 6px 10px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0.98) 0%, 
+    rgba(83, 62, 23, 1) 50%,
+    rgba(83, 62, 23, 0.98) 100%);
+  border: 0.2px solid rgba(255, 254, 136, 0.4);
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+  z-index: 9999;
+  pointer-events: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 254, 136, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  text-shadow: 0 0 8px rgba(255, 254, 136, 0.8), 0 0 12px rgba(83, 62, 23, 0.5);
+  min-width: max-content;
+}
+
+.color-name-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(83, 62, 23, 1);
+  filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.4));
+}
+
+.grid-item:hover .color-name-overlay {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(2px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+}
+
+/* Scrollbar Styling for Content Grid */
+.content-grid-wrapper::-webkit-scrollbar {
+  width: 2px;
+}
+
+.content-grid-wrapper::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.content-grid-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  border-radius: 1px;
+  opacity: 0.8;
+}
+
+.content-grid-wrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  opacity: 1;
+}
+
+.content-scroll-indicator {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.content-scroll-arrow {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transition: all 0.2s;
+  pointer-events: auto;
+}
+
+.content-scroll-arrow i {
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 50%,
+    #533e17 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.content-scroll-arrow:hover i {
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 50%,
+    #533e17 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: scale(1.1);
+}
+
+/* Slider Section */
+.slider-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.slider-container {
+  width: 100%;
+  padding: 40px 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.slider-track-wrapper {
+  width: 100%;
+  position: relative;
+  height: 8px;
+}
+
+.slider-track-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 8px;
+  border-radius: 4px;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+    rgba(83, 62, 23, 0) 0%, 
+    rgba(83, 62, 23, 0.4) 10%,
+    #533e17 20%, 
+    #533e17 25%,
+    rgba(255, 254, 136, 0.8) 30%,
+    #fffe88 35%, 
+    #fffe88 65%,
+    rgba(255, 254, 136, 0.8) 70%,
+    #533e17 75%,
+    #533e17 80%,
+    rgba(83, 62, 23, 0.4) 90%,
+    rgba(83, 62, 23, 0) 100%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  box-shadow: 0 0 10px rgba(255, 254, 136, 0.8), 0 0 20px rgba(255, 254, 136, 0.6), 0 0 30px rgba(83, 62, 23, 0.5), 0 0 40px rgba(83, 62, 23, 0.3);
+  animation: glowFade 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.custom-slider {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.custom-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 30%,
+    #fffe88 70%,
+    #533e17 100%);
+  border: none;
+  border-radius: 0;
+  transform: rotate(45deg);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(255, 254, 136, 0.9), 0 0 16px rgba(83, 62, 23, 0.7);
+  position: relative;
+  z-index: 3;
+  margin-top: -8px;
+}
+
+.custom-slider::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+}
+
+.custom-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, 
+    #533e17 0%, 
+    #fffe88 30%,
+    #fffe88 70%,
+    #533e17 100%);
+  border: none;
+  border-radius: 0;
+  transform: rotate(45deg);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(255, 254, 136, 0.9), 0 0 16px rgba(83, 62, 23, 0.7);
+}
+
+/* Material Color Selection Header */
+.material-color-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+
+.back-to-material-button {
+  background-color: transparent;
+  border: 0.2px solid #44444475;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'Bodoni Moda', serif;
+  cursor: pointer;
+  transition: all 0.2s, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  position: relative;
+  z-index: 0;
+}
+
+.back-to-material-button:hover {
+  border-color: #555;
+  transform: scale(1.02);
+}
+
+.back-to-material-button:active {
+  transform: scale(0.98);
+}
+
+.material-color-label {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'Bodoni Moda', serif;
+  opacity: 0.8;
+  flex: 1;
+}
+
+
