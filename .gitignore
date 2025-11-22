@@ -26,7 +26,9 @@ dist-ssr
 # Large 3D model files (exceed GitHub's 100MB limit)
 assets/*.fbx
 assets/*.glb
-public/assets/*.glb
+public/assets/render.glb
 public/assets/*.fbx
+# Allow smaller model files (under 100MB)
+# public/assets/shoe.glb is allowed (34MB)
 
 

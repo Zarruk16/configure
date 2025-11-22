@@ -204,7 +204,10 @@ const getMetalColorHex = (colorName) => {
 
 // Component to load and display the shoe model
 function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], configState = {} }) {
-  const { scene } = useGLTF('/assets/render.glb')
+  // Use environment variable for model URL, fallback to local path
+  // If render.glb is not available, fallback to shoe.glb (smaller file, can be committed)
+  const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/shoe.glb'
+  const { scene } = useGLTF(modelPath)
   
   // Clone the scene to avoid mutating the original
   const clonedScene = useMemo(() => {
@@ -926,7 +929,8 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
 }
 
 // Preload the model
-useGLTF.preload('/assets/render.glb')
+const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/shoe.glb'
+useGLTF.preload(modelPath)
 
 // Reflective ground plane component
 function ReflectiveGround() {
