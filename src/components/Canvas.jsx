@@ -203,10 +203,17 @@ const getMetalColorHex = (colorName) => {
 }
 
 // Component to load and display the shoe model
-function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], configState = {} }) {
+function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], configState = {}, onLoad }) {
   // Use environment variable for model URL, fallback to render.glb
   const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/render.glb'
   const { scene } = useGLTF(modelPath)
+  
+  // Notify parent when model is loaded
+  React.useEffect(() => {
+    if (scene && onLoad) {
+      onLoad()
+    }
+  }, [scene, onLoad])
   
   // Clone the scene to avoid mutating the original
   const clonedScene = useMemo(() => {
@@ -931,6 +938,16 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
 const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/render.glb'
 useGLTF.preload(modelPath)
 
+// Loading component for model loading
+function LoadingIndicator() {
+  return (
+    <div className="loading-container">
+      <div className="loading-spinner"></div>
+      <div className="loading-text">Loading 3D Model...</div>
+    </div>
+  )
+}
+
 // Reflective ground plane component
 function ReflectiveGround() {
   return (
@@ -951,6 +968,7 @@ function ReflectiveGround() {
 
 function Canvas({ configState = {} }) {
   const [hasError, setHasError] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   if (hasError) {
     return (
@@ -962,6 +980,7 @@ function Canvas({ configState = {} }) {
 
   return (
     <div className="canvas">
+      {isLoading && <LoadingIndicator />}
       <R3FCanvas
         camera={{ position: [8, 6, 15], fov: 45, near: 0.1, far: 1000 }}
         gl={{ antialias: true }}
@@ -1025,6 +1044,7 @@ function Canvas({ configState = {} }) {
                 scale={0.4}
                 rotation={[0, -0.2, 0]}
                 configState={configState}
+                onLoad={() => setIsLoading(false)}
               />
               <OrbitControls 
                 enablePan={true}
