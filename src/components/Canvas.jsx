@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react'
 import { Canvas as R3FCanvas } from '@react-three/fiber'
-import { OrbitControls, useGLTF } from '@react-three/drei'
-import { MeshStandardMaterial, MeshPhysicalMaterial, PlaneGeometry, Color } from 'three'
+import { OrbitControls, useGLTF, useTexture, Environment } from '@react-three/drei'
+import { MeshStandardMaterial, MeshPhysicalMaterial, PlaneGeometry, Color, DoubleSide, TextureLoader, RepeatWrapping, Mesh, Box3 } from 'three'
 import './Canvas.css'
 
 // Enhanced color extraction function
@@ -202,11 +202,64 @@ const getMetalColorHex = (colorName) => {
   return metalColorMap[colorName] || getColorHex(colorName)
 }
 
+// Load metal textures for heel (with fallback if textures don't exist)
+function useMetalTextures() {
+  const textureLoader = React.useMemo(() => new TextureLoader(), [])
+  const [textures, setTextures] = React.useState({ 
+    baseColor: null, 
+    normal: null, 
+    roughness: null, 
+    metallic: null 
+  })
+  
+  React.useEffect(() => {
+    const basePath = '/assets/textures/metal/'
+    
+    // Helper function to load texture with error handling
+    const loadTexture = (filename, onLoad) => {
+      return textureLoader.load(
+        basePath + filename,
+        (texture) => {
+          texture.wrapS = RepeatWrapping
+          texture.wrapT = RepeatWrapping
+          texture.repeat.set(2, 2)
+          if (onLoad) onLoad(texture)
+        },
+        undefined,
+        (error) => {
+          console.log(`Metal texture ${filename} not found, using procedural material`)
+        }
+      )
+    }
+    
+    // Load all textures
+    const baseColor = loadTexture('metal_basecolor.jpg')
+    const normal = loadTexture('metal_normal.jpg')
+    const roughness = loadTexture('metal_roughness.jpg')
+    const metallic = loadTexture('metal_metallic.jpg')
+    
+    setTextures({ baseColor, normal, roughness, metallic })
+    
+    // Cleanup function
+    return () => {
+      [baseColor, normal, roughness, metallic].forEach(texture => {
+        if (texture) texture.dispose()
+      })
+    }
+  }, [textureLoader])
+  
+  return textures
+}
+
 // Component to load and display the shoe model
 function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], configState = {}, onLoad }) {
   // Use environment variable for model URL, fallback to render.glb
   const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/render.glb'
   const { scene } = useGLTF(modelPath)
+  
+  // Metal textures disabled for now - was causing issues
+  // const metalTextures = useMetalTextures()
+  const metalTextures = { baseColor: null, normal: null, roughness: null, metallic: null }
   
   // Notify parent when model is loaded
   React.useEffect(() => {
@@ -348,18 +401,23 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         
         if (meshMapping) {
           if (meshMapping.feature === 'Heel') {
-            // Precious metals - realistic gold with physical material properties
+            // Precious metals - bright metallic appearance
             const goldColor = new Color(getMetalColorHex('Gold'))
+            // Brighten the color for metals
+            goldColor.multiplyScalar(1.3) // Make it brighter
             defaultMaterialProps = {
-              metalness: 0.9, // High metalness but slightly less for realism
-              roughness: 0.15, // Slightly higher roughness for realistic metal surface (not perfect mirror)
-              color: goldColor.getHex(), // Gold color
+              metalness: 0.95, // High metalness but slightly reduced to allow more color
+              roughness: 0.08, // Low roughness for polished, mirror-like metal surface
+              color: goldColor.getHex(), // Brightened gold color
               usePhysicalMaterial: true, // Use MeshPhysicalMaterial for better reflections
-              clearcoat: 0.5, // Moderate clearcoat for realistic metal finish
-              clearcoatRoughness: 0.2, // Slight roughness in clearcoat for realistic imperfections
-              sheen: 0.1, // Subtle sheen for realistic metal
-              sheenRoughness: 0.3,
-              envMapIntensity: 5.0, // Increased environment map intensity for stronger reflections
+              clearcoat: 0.9, // High clearcoat for glossy metal finish
+              clearcoatRoughness: 0.1, // Smooth clearcoat for polished look
+              sheen: 0.2, // Enhanced sheen for metallic luster
+              sheenRoughness: 0.2,
+              specularIntensity: 1.5, // Higher specular highlights for brightness
+              specularColor: new Color(1.0, 0.95, 0.8), // Brighter warm gold specular highlights
+              envMapIntensity: 8.0, // Very high environment map intensity for strong reflections and brightness
+              ior: 0.15, // Index of refraction for metals (very low)
             }
           } else if (meshMapping.feature === 'Gems') {
             // Gems - sapphire blue default
@@ -462,6 +520,17 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         // Use the default color from material props (which now has proper defaults)
         const currentColor = new Color(defaultMaterialProps.color)
         
+        // Debug logging for heel
+        if (meshMapping && meshMapping.feature === 'Heel') {
+          console.log('Creating heel material:', {
+            meshName: originalName,
+            color: defaultMaterialProps.color,
+            colorHex: `#${defaultMaterialProps.color.toString(16)}`,
+            metalness: defaultMaterialProps.metalness,
+            usePhysicalMaterial: defaultMaterialProps.usePhysicalMaterial
+          })
+        }
+        
         // Dispose of old material if it exists
         if (child.material) {
           if (Array.isArray(child.material)) {
@@ -484,7 +553,7 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         // Create material with feature-appropriate properties
         // Use MeshPhysicalMaterial for gems and outsole (more realistic), MeshStandardMaterial for others
         if (defaultMaterialProps.usePhysicalMaterial) {
-          child.material = new MeshPhysicalMaterial({
+          const materialConfig = {
             color: currentColor,
             metalness: defaultMaterialProps.metalness,
             roughness: defaultMaterialProps.roughness,
@@ -498,7 +567,17 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
             specularIntensity: defaultMaterialProps.specularIntensity || 1.0,
             specularColor: defaultMaterialProps.specularColor || new Color(1, 1, 1),
             envMapIntensity: defaultMaterialProps.envMapIntensity || 1.0,
-          })
+          }
+          
+          // Apply metal textures if this is the heel and textures are available
+          if (meshMapping && meshMapping.feature === 'Heel' && metalTextures.baseColor) {
+            materialConfig.map = metalTextures.baseColor
+            if (metalTextures.normal) materialConfig.normalMap = metalTextures.normal
+            if (metalTextures.roughness) materialConfig.roughnessMap = metalTextures.roughness
+            if (metalTextures.metallic) materialConfig.metalnessMap = metalTextures.metallic
+          }
+          
+          child.material = new MeshPhysicalMaterial(materialConfig)
         } else {
           child.material = new MeshStandardMaterial({
             color: currentColor,
@@ -584,16 +663,19 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
           } else if (mapping.feature === 'Cascade') {
             defaultColorName = 'Emerald'
           } else if (mapping.feature === 'Sole/Strap') {
-            // Outsole gets Midnight, Insole gets Black
+            // Outsole gets Midnight, Insole gets Brown
             const isOutsole = mapping.category === 'Outsole/Outstrap'
-            defaultColorName = isOutsole ? 'Midnight' : 'Black'
+            defaultColorName = isOutsole ? 'Midnight' : 'Brown'
           } else if (mapping.feature === 'Material & Structure' || meshName === 'g_Default') {
             defaultColorName = 'Silver'
           }
           
           // Apply default color if we have one
           if (defaultColorName && child.material) {
-            const defaultColorHex = getColorHex(defaultColorName)
+            // Use getMetalColorHex for Heel feature, getColorHex for others
+            const defaultColorHex = mapping.feature === 'Heel' 
+              ? getMetalColorHex(defaultColorName)
+              : getColorHex(defaultColorName)
             child.material.color = new Color(defaultColorHex)
             child.material.needsUpdate = true
             
@@ -607,7 +689,7 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
           } else if (mapping && mapping.feature === 'Sole/Strap') {
             // Apply default colors for Sole/Strap based on category
             const isOutsole = mapping.category === 'Outsole/Outstrap'
-            const defaultColor = isOutsole ? 'Midnight' : 'Black'
+            const defaultColor = isOutsole ? 'Midnight' : 'Brown'
             const defaultColorHex = getColorHex(defaultColor)
             child.material.color = new Color(defaultColorHex)
             child.material.needsUpdate = true
@@ -620,7 +702,7 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         }
       }
     })
-  }, [clonedScene])
+  }, [clonedScene, metalTextures])
   
   // Apply configuration changes to the model
   // Only update when color/material selections change, not when tabs/features change
@@ -630,29 +712,52 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
     const { activeFeature, selectedGridItem, selectedColorName, activeCategory, selectedGem } = configState
     
     // Determine what color/material to apply
+    // For Heel: use selectedMaterial if no color is selected yet (material selection should also update the model)
     let colorToApply = selectedColorName
+    if (activeFeature === 'Heel' && !colorToApply && configState.selectedMaterial) {
+      colorToApply = configState.selectedMaterial
+    }
+    
+    console.log('Material update effect triggered:', {
+      activeFeature,
+      selectedColorName,
+      selectedMaterial: configState.selectedMaterial,
+      colorToApply,
+      selectedGridItem,
+      activeCategory,
+      selectedGem: selectedGem?.gemName
+    })
     
     // For Gems feature: if a gem is selected and a color is selected, apply the color
     // For Crown/Cascade: if a color is selected, apply it
+    // For Heel: if a material/color is selected, apply it
     // For other features: apply if color is selected
     
-    // Only apply changes if we have a color selected
-    // This ensures materials persist when just switching tabs
-    if (!colorToApply) return
+    // Only apply changes if we have a color selected OR if we're on a feature that doesn't require color selection
+    // This ensures materials persist when just switching tabs, but also allows updates when colors are selected
     
     // CRITICAL: Only apply colors that were selected for the CURRENT activeFeature
     // This prevents colors from one feature affecting another when switching tabs
-    const colorSelectedForFeature = colorFeatureMap.current[colorToApply]
-    if (colorSelectedForFeature && colorSelectedForFeature !== activeFeature) {
-      // This color was selected for a different feature, don't apply it
+    // BUT: Always allow updates when a color is selected for the current active feature
+    if (colorToApply) {
+      const colorSelectedForFeature = colorFeatureMap.current[colorToApply]
+      // Only skip if this color was previously selected for a DIFFERENT feature
       // This prevents colors from changing when switching tabs
-      return
-    }
-    
-    // Record which feature this color is for (if not already recorded)
-    // This allows us to track which feature each color belongs to
-    if (!colorSelectedForFeature) {
+      if (colorSelectedForFeature && colorSelectedForFeature !== activeFeature) {
+        // This color was selected for a different feature, don't apply it
+        return
+      }
+      // Always record/update which feature this color is for when it's selected
+      // This ensures new selections are applied
       colorFeatureMap.current[colorToApply] = activeFeature
+    } else {
+      // No color selected - only proceed if this feature doesn't require explicit color selection
+      // For features like Heel, Sole/Strap, etc., we should still apply default materials
+      if (activeFeature !== 'Heel' && 
+          activeFeature !== 'Sole/Strap' && 
+          activeFeature !== 'Material & Structure') {
+        return
+      }
     }
     
     // For Gems feature, we need either a gem selected OR a color selected
@@ -688,15 +793,21 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         let materialProps = {}
         
         if (mapping) {
+          // Special handling for Heel feature - always check first
+          if (activeFeature === 'Heel' && mapping.feature === 'Heel') {
+            // Explicitly handle Heel feature - always update when color/material is selected
+            shouldUpdate = true
+            console.log('Heel mesh found:', meshName, 'colorToApply:', colorToApply)
+          }
           // Check if feature matches
-          if (mapping.feature === activeFeature) {
+          else if (mapping.feature === activeFeature) {
             // For features with categories, check category match
             if (activeCategory && mapping.category) {
               if (mapping.category === activeCategory) {
                 shouldUpdate = true
               }
             } else if (!activeCategory || !mapping.category) {
-              // No category filtering needed (e.g., Heel, Gems, Crown, Cascade features)
+              // No category filtering needed (e.g., Gems, Crown, Cascade features)
               shouldUpdate = true
             }
           }
@@ -717,7 +828,7 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
         }
         
         // Apply color if we have a match
-        if (shouldUpdate) {
+        if (shouldUpdate && colorToApply) {
           // Check if this color was selected for a different feature
           // If so, don't apply it (prevents colors from one feature affecting another)
           const colorSelectedForFeature = colorFeatureMap.current[colorToApply]
@@ -734,17 +845,36 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
           console.log('Updating mesh:', meshName, 'with color:', colorToApply, 'for feature:', activeFeature)
           // Determine color and material properties based on feature type
           if (mapping.feature === 'Heel') {
-            // Heel uses precious metals with realistic physical material properties
-            colorHex = getMetalColorHex(colorToApply)
+            // Heel uses precious metals with bright metallic appearance
+            // Brighten the color for metals
+            const baseColor = new Color(getMetalColorHex(colorToApply))
+            baseColor.multiplyScalar(1.3) // Make it brighter
+            colorHex = `#${baseColor.getHexString()}`
+            
             materialProps = {
-              metalness: 0.9, // High metalness but slightly less for realism
-              roughness: 0.15, // Slightly higher roughness for realistic metal surface (not perfect mirror)
+              metalness: 0.95, // High metalness but slightly reduced to allow more color
+              roughness: 0.08, // Low roughness for polished, mirror-like metal surface
               usePhysicalMaterial: true, // Use MeshPhysicalMaterial for better reflections
-              clearcoat: 0.5, // Moderate clearcoat for realistic metal finish
-              clearcoatRoughness: 0.2, // Slight roughness in clearcoat for realistic imperfections
-              sheen: 0.1, // Subtle sheen for realistic metal
-              sheenRoughness: 0.3,
-              envMapIntensity: 2.0, // Good environment map intensity for reflections
+              clearcoat: 0.9, // High clearcoat for glossy metal finish
+              clearcoatRoughness: 0.1, // Smooth clearcoat for polished look
+              sheen: 0.2, // Enhanced sheen for metallic luster
+              sheenRoughness: 0.2,
+              specularIntensity: 1.5, // Higher specular highlights for brightness
+              specularColor: new Color(1.0, 0.95, 0.8), // Brighter warm gold specular highlights (adjusts based on metal type)
+              envMapIntensity: 8.0, // Very high environment map intensity for strong reflections and brightness
+              ior: 0.15, // Index of refraction for metals (very low)
+            }
+            
+            // Adjust specular color based on metal type for realism
+            const metalName = colorToApply.toLowerCase()
+            if (metalName.includes('gold')) {
+              materialProps.specularColor = new Color(1.0, 0.95, 0.8) // Brighter warm gold
+            } else if (metalName.includes('silver') || metalName.includes('platinum') || metalName.includes('white gold')) {
+              materialProps.specularColor = new Color(1.0, 1.0, 1.0) // Bright cool silver/platinum
+            } else if (metalName.includes('rose gold')) {
+              materialProps.specularColor = new Color(1.0, 0.9, 0.85) // Brighter warm rose gold
+            } else if (metalName.includes('copper') || metalName.includes('bronze')) {
+              materialProps.specularColor = new Color(1.0, 0.85, 0.7) // Brighter warm copper/bronze
             }
           } else if (mapping.feature === 'Gems' || mapping.feature === 'Crown' || mapping.feature === 'Cascade') {
             // Gemstones - highly realistic with physical material properties
@@ -857,23 +987,34 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
           const isPhysicalMaterial = child.material.isMeshPhysicalMaterial
           
           if (needsPhysicalMaterial && !isPhysicalMaterial) {
-            // Switch to MeshPhysicalMaterial for gems or outsole
-            child.material.dispose()
-            child.material = new MeshPhysicalMaterial({
+            // Switch to MeshPhysicalMaterial for gems, outsole, or heel
+            const physicalProps = {
               color: new Color(colorHex),
               metalness: materialProps.metalness || 0.0,
               roughness: materialProps.roughness || 0.0,
               transmission: materialProps.transmission || 0,
               thickness: materialProps.thickness || 0,
-              ior: materialProps.ior || 1.5,
+              ior: materialProps.ior !== undefined ? materialProps.ior : (mapping.feature === 'Heel' ? 0.15 : 1.5),
               clearcoat: materialProps.clearcoat || 0,
               clearcoatRoughness: materialProps.clearcoatRoughness || 0.1,
               sheen: materialProps.sheen || 0,
               sheenRoughness: materialProps.sheenRoughness || 0.3,
               specularIntensity: materialProps.specularIntensity || 1.0,
               specularColor: materialProps.specularColor || new Color(1, 1, 1),
-              envMapIntensity: materialProps.envMapIntensity || 5.0, // Increased default envMapIntensity for stronger reflections
-            })
+              envMapIntensity: materialProps.envMapIntensity || (mapping.feature === 'Heel' ? 8.0 : 5.0),
+            }
+            
+            // Apply metal textures if this is the heel and textures are available
+            if (mapping.feature === 'Heel' && metalTextures && metalTextures.baseColor) {
+              physicalProps.map = metalTextures.baseColor
+              if (metalTextures.normal) physicalProps.normalMap = metalTextures.normal
+              if (metalTextures.roughness) physicalProps.roughnessMap = metalTextures.roughness
+              if (metalTextures.metallic) physicalProps.metalnessMap = metalTextures.metallic
+            }
+            
+            child.material.dispose()
+            child.material = new MeshPhysicalMaterial(physicalProps)
+            child.material.needsUpdate = true
           } else if (!needsPhysicalMaterial && isPhysicalMaterial && mapping.feature !== 'Sole/Strap') {
             // Switch back to MeshStandardMaterial for non-gems
             child.material.dispose()
@@ -884,7 +1025,13 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
             })
           } else {
             // Same material type, just update properties
-            child.material.color = new Color(colorHex)
+            console.log('Updating existing material for:', meshName, 'colorHex:', colorHex, 'material type:', child.material.type)
+            // Use setHex to properly update the color
+            if (typeof colorHex === 'string' && colorHex.startsWith('#')) {
+              child.material.color.setHex(parseInt(colorHex.replace('#', ''), 16))
+            } else {
+              child.material.color = new Color(colorHex)
+            }
             child.material.metalness = materialProps.metalness
             child.material.roughness = materialProps.roughness
             
@@ -899,7 +1046,7 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
               if (materialProps.sheenRoughness !== undefined) child.material.sheenRoughness = materialProps.sheenRoughness
               if (materialProps.specularIntensity !== undefined) child.material.specularIntensity = materialProps.specularIntensity
               if (materialProps.specularColor) {
-                child.material.specularColor = materialProps.specularColor
+                child.material.specularColor.copy(materialProps.specularColor)
               }
               if (materialProps.envMapIntensity !== undefined) {
                 child.material.envMapIntensity = materialProps.envMapIntensity
@@ -914,12 +1061,14 @@ function ShoeModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], conf
   }, [
     clonedScene,
     // Only depend on values that should trigger material updates
-    // NOT activeTab or activeFeature - materials should persist when switching tabs/features
-    // The logic inside already checks activeFeature to determine which meshes to update
+    // Include activeFeature so we know when to apply colors for the current feature
+    configState.activeFeature,
     configState.selectedColorName,
+    configState.selectedMaterial, // Include selectedMaterial for Heel feature
     configState.selectedGem,
     configState.selectedGridItem,
     configState.activeCategory,
+    metalTextures, // Include metalTextures so updates work when textures load
   ])
   
   if (!clonedScene) return null
@@ -948,27 +1097,227 @@ function LoadingIndicator() {
   )
 }
 
-// Reflective ground plane component
+// Custom studio environment component - provides environment map for model reflections only
+// Studio environment component - loads HDR environment from assets
+function StudioEnvironment() {
+  return (
+    <Environment
+      files="/assets/enviroments/studio_small_01_4k.hdr"
+      background={false}
+      rotation={[0, Math.PI / 4, 0]}
+      intensity={0.7}
+    />
+  )
+}
+
+// Reflective ground plane component - ground with reflection
 function ReflectiveGround() {
   return (
     <mesh
-      rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, -2.5, 0]}
+      rotation={[-Math.PI / 5, 0, 0]}
+      position={[0, -50, 0]}
       receiveShadow
     >
-      <planeGeometry args={[30, 30]} />
+      <planeGeometry args={[500, 400]} />
       <meshStandardMaterial
-        color={0x0a0a0a}
-        metalness={0.95}
-        roughness={0.05}
+        color={new Color(0, 0, 0)}
+        metalness={0.0}
+        roughness={1.0}
+        side={DoubleSide}
+        emissive={new Color(0, 0, 0)}
+        emissiveIntensity={0}
       />
     </mesh>
+  )
+}
+
+// Glass table reflection component (not used currently)
+function GlassTable() {
+  return (
+    <mesh
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, -11.5, 0]}
+      receiveShadow
+    >
+      <planeGeometry args={[50, 50]} />
+      <meshPhysicalMaterial
+        color={0xffffff}
+        metalness={0.0}
+        roughness={0.0}
+        transmission={0.95}
+        thickness={1.0}
+        ior={1.5}
+        clearcoat={1.0}
+        clearcoatRoughness={0.0}
+        envMapIntensity={3.0}
+        opacity={0.2}
+        transparent={true}
+        side={DoubleSide}
+      />
+    </mesh>
+  )
+}
+
+// Reflected shoe component - creates a mirror reflection below the glass
+function ReflectedShoe({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0], configState = {} }) {
+  // Use environment variable for model URL, fallback to render.glb
+  const modelPath = import.meta.env.VITE_MODEL_URL || '/assets/render.glb'
+  const { scene } = useGLTF(modelPath)
+  
+  // Clone the scene and filter to show only parts that would be visible in a ground reflection
+  const clonedScene = useMemo(() => {
+    if (!scene) return null
+    const cloned = scene.clone()
+    
+    // Get the bounding box to determine the bottom of the model
+    const box = new Box3().setFromObject(cloned)
+    const modelBottom = box.min.y
+    
+    cloned.traverse((child) => {
+      if (child.isMesh) {
+        // Get the mesh's bounding box
+        const meshBox = new Box3().setFromObject(child)
+        const meshBottom = meshBox.min.y
+        const meshTop = meshBox.max.y
+        
+        // Only show meshes that are at or near the bottom of the model
+        // This represents parts that would be visible in a ground reflection
+        // Use a stricter threshold - only bottom 15% of the model
+        const threshold = (box.max.y - box.min.y) * 0.15 // Bottom 15% of the model
+        const isBottomPart = (meshBottom - modelBottom) < threshold || 
+                            (meshTop - modelBottom) < threshold
+        
+        child.visible = isBottomPart
+      }
+    })
+    
+    return cloned
+  }, [scene])
+  
+  // Calculate reflection position (mirrored across ground plane at y = -16)
+  // Position reflection just below the ground plane so it's visible through the glass
+  const groundPlaneY = -55
+  const originalY = position[1]
+  const distanceFromGround = originalY - groundPlaneY
+  const reflectedY = groundPlaneY - distanceFromGround - 0.1 // Slightly below ground for visibility
+  
+  // Update position, scale, and rotation for reflection
+  React.useEffect(() => {
+    if (!clonedScene) return
+    // Calculate reflection: mirror across the ground plane at y = -16
+    const groundPlaneY = -55
+    const originalY = position[1]
+    // Distance from model center to ground plane
+    const distanceFromGround = originalY - groundPlaneY
+    // Reflection position: ground plane minus the distance (creates reflection on ground surface)
+    const reflectedY = groundPlaneY - distanceFromGround
+    
+    // Position: mirrored Y (on ground surface), same X and Z
+    clonedScene.position.set(position[0], reflectedY, position[2])
+    // Scale: flip Y to create proper ground reflection (upside down, like a shadow)
+    clonedScene.scale.set(scale, -scale, scale)
+    // Rotation: same rotation as original (the Y flip creates the reflection effect)
+    clonedScene.rotation.set(rotation[0], rotation[1], rotation[2])
+  }, [clonedScene, position, scale, rotation])
+  
+  // Apply same material updates as main shoe
+  React.useEffect(() => {
+    if (!clonedScene) return
+    
+    // This will be handled by the same material update logic in ShoeModel
+    // We just need to ensure the reflection gets the same materials
+  }, [clonedScene, configState])
+  
+  // Apply same material logic as main shoe but with realistic ground reflection effect
+  React.useEffect(() => {
+    if (!clonedScene) return
+    
+    // Apply the same material updates as the main shoe
+    // Make it look like a realistic ground reflection (slightly darker, with proper opacity)
+    clonedScene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        // Make materials look like a realistic reflection
+        if (Array.isArray(child.material)) {
+          child.material.forEach(mat => {
+            if (mat.isMeshPhysicalMaterial || mat.isMeshStandardMaterial) {
+              mat.opacity = 1.0
+              mat.transparent = false
+              // Darken the reflection more to avoid see-through effect
+              if (mat.color) {
+                const originalColor = mat.color.clone()
+                // Darker reflection to prevent see-through: 40% brightness
+                mat.color.setRGB(
+                  originalColor.r * 0.4,
+                  originalColor.g * 0.4,
+                  originalColor.b * 0.4
+                )
+              }
+              // Reduce reflectivity for blurred reflection effect
+              if (mat.envMapIntensity !== undefined) {
+                mat.envMapIntensity = mat.envMapIntensity * 0.2
+              }
+              // Increase roughness significantly to create blur effect
+              if (mat.roughness !== undefined) {
+                mat.roughness = Math.min(mat.roughness * 2.5, 0.8)
+              }
+              // Add blur effect by reducing clearcoat
+              if (mat.clearcoat !== undefined) {
+                mat.clearcoat = mat.clearcoat * 0.3
+              }
+              if (mat.clearcoatRoughness !== undefined) {
+                mat.clearcoatRoughness = Math.max(mat.clearcoatRoughness * 3, 0.5)
+              }
+            }
+          })
+        } else {
+          if (child.material.isMeshPhysicalMaterial || child.material.isMeshStandardMaterial) {
+            child.material.opacity = 1.0
+            child.material.transparent = false
+            // Darken the reflection more to avoid see-through effect
+            if (child.material.color) {
+              const originalColor = child.material.color.clone()
+              // Darker reflection to prevent see-through: 40% brightness
+              child.material.color.setRGB(
+                originalColor.r * 0.4,
+                originalColor.g * 0.4,
+                originalColor.b * 0.4
+              )
+            }
+            // Reduce reflectivity for blurred reflection effect
+            if (child.material.envMapIntensity !== undefined) {
+              child.material.envMapIntensity = child.material.envMapIntensity * 0.2
+            }
+            // Increase roughness significantly to create blur effect
+            if (child.material.roughness !== undefined) {
+              child.material.roughness = Math.min(child.material.roughness * 2.5, 0.8)
+            }
+            // Add blur effect by reducing clearcoat
+            if (child.material.clearcoat !== undefined) {
+              child.material.clearcoat = child.material.clearcoat * 0.3
+            }
+            if (child.material.clearcoatRoughness !== undefined) {
+              child.material.clearcoatRoughness = Math.max(child.material.clearcoatRoughness * 3, 0.5)
+            }
+          }
+        }
+        child.material.needsUpdate = true
+      }
+    })
+  }, [clonedScene, configState])
+  
+  if (!clonedScene) return null
+  
+  return (
+    <primitive 
+      object={clonedScene}
+    />
   )
 }
 
 function Canvas({ configState = {} }) {
   const [hasError, setHasError] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
+  const [showReflection, setShowReflection] = React.useState(true)
 
   if (hasError) {
     return (
@@ -982,77 +1331,101 @@ function Canvas({ configState = {} }) {
     <div className="canvas">
       {isLoading && <LoadingIndicator />}
       <R3FCanvas
-        camera={{ position: [8, 6, 15], fov: 45, near: 0.1, far: 1000 }}
+        camera={{ position: [12, -50, 12], fov: 30, near: 0.1, far: 1000 }}
         gl={{ antialias: true }}
         onError={(error) => {
           console.error('R3F Canvas error:', error)
           setHasError(true)
         }}
+        style={{ background: '#000000' }}
       >
             <Suspense fallback={null}>
-              {/* Professional studio lighting setup without HDR */}
+              {/* Studio environment from HDR file */}
+              <StudioEnvironment />
               
-              {/* Key light - main light source (bright, from front-right) */}
+              {/* Professional studio lighting setup - optimized for reflections */}
+              
+              {/* Key light - main light source (from above and front) */}
               <directionalLight 
-                position={[5, 8, 5]} 
-                intensity={2.5} 
+                position={[5, 10, 5]} 
+                intensity={1.5} 
                 castShadow
               />
               
-              {/* Fill light - softer light from opposite side */}
+              {/* Fill light - from opposite side and above */}
               <directionalLight 
-                position={[-5, 6, 3]} 
+                position={[-5, 10, 3]} 
+                intensity={1.0}
+              />
+              
+              {/* Top light - directly overhead for better reflections */}
+              <directionalLight 
+                position={[0, 15, 0]} 
                 intensity={1.2}
               />
               
-              {/* Rim/Back light - creates edge definition */}
+              {/* Front light - illuminates front of model */}
               <directionalLight 
-                position={[-3, 4, -8]} 
-                intensity={1.5}
+                position={[0, 5, 10]} 
+                intensity={1.0}
               />
               
-              {/* Top light - overhead illumination */}
-              <directionalLight 
-                position={[0, 12, 0]} 
-                intensity={1.8}
-              />
-              
-              {/* Additional side lights for even illumination */}
+              {/* Side lights for even illumination */}
               <pointLight 
-                position={[8, 6, 4]} 
-                intensity={1.5}
-                distance={20}
+                position={[10, 8, 5]} 
+                intensity={1.0}
+                distance={30}
               />
               <pointLight 
-                position={[-8, 6, 4]} 
-                intensity={1.2}
-                distance={20}
+                position={[-10, 8, 5]} 
+                intensity={1.0}
+                distance={30}
               />
               
               {/* Soft ambient fill for overall illumination */}
-              <ambientLight intensity={0.5} />
+              <ambientLight intensity={0.2} />
               
-              {/* Hemisphere light for natural sky/ground lighting */}
+              {/* Hemisphere light - minimal for black background */}
               <hemisphereLight 
-                skyColor={0xffffff}
-                groundColor={0x444444}
-                intensity={0.6}
+                skyColor={0x000000}
+                groundColor={0x000000}
+                intensity={0.1}
               />
               
               <ShoeModel 
-                position={[0, -10, 0]} 
+                position={[0, -54, 0]} 
                 scale={0.4}
-                rotation={[0, -0.2, 0]}
+                rotation={[0, 1.9, 0]}
                 configState={configState}
                 onLoad={() => setIsLoading(false)}
               />
+              {showReflection && (
+                <ReflectedShoe 
+                  position={[0, -56, 0]} 
+                  scale={0.4}
+                  rotation={[0, 1.9, 0]}
+                  configState={configState}
+                />
+              )}
               <OrbitControls 
                 enablePan={true}
                 enableZoom={true}
                 enableRotate={true}
-                minDistance={8}
-                maxDistance={40}
-                target={[0, -9, 0]}
+                minDistance={6}
+                maxDistance={20}
+                minPolarAngle={0}
+                maxPolarAngle={Math.PI}
+                target={[0, -50, 0]}
+                onChange={(e) => {
+                  // Hide reflection when viewing from below (camera Y position below model)
+                  const camera = e?.target?.object
+                  if (camera) {
+                    const modelY = -50
+                    // If camera is below the model, hide reflection
+                    const viewingFromBelow = camera.position.y < modelY
+                    setShowReflection(!viewingFromBelow)
+                  }
+                }}
               />
             </Suspense>
       </R3FCanvas>
