@@ -292,7 +292,7 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
   const activeTab = configState.activeTab || 'Adornment'
   const activeFeature = configState.activeFeature || 'Gems'
   const activeCategory = configState.activeCategory || 'Precious'
-  const selectedGridItem = configState.selectedGridItem || null
+  const selectedGridItem = configState.selectedGridItem ?? null
   const sliderValue = configState.sliderValue || 50
   const selectedGem = configState.selectedGem || { category: 'Precious', itemIndex: null, gemName: null }
   const selectedMaterial = configState.selectedMaterial || null
@@ -303,6 +303,11 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
   const categoriesPerView = 4 // Number of categories to show at once
   const [hasMoreContent, setHasMoreContent] = useState(false)
   const contentGridRef = useRef(null)
+  
+  // Track selected colors per feature to persist across tab/feature switches
+  const featureColorsRef = useRef({}) // Format: { 'feature:category': { colorName, gridItem } }
+  const previousFeatureRef = useRef(activeFeature)
+  const previousCategoryRef = useRef(activeCategory)
   
   // Helper functions to update shared state
   const setActiveTab = (tab) => updateConfigState({ activeTab: tab })
@@ -518,97 +523,454 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
     return metalColorMap[colorName] || getColorHex(colorName)
   }
 
-  // Get gem image URL - uses real images from free sources
+  // Get gem image URL - uses real images from local assets folder
   const getGemImagePath = (gemName) => {
-    // Use Unsplash Source API with gem-specific search terms
-    // This provides real, high-quality gemstone photos
-    const searchTerms = {
-      'Diamond': 'diamond-gemstone-jewelry',
-      'Emerald': 'emerald-gemstone-green',
-      'Ruby': 'ruby-gemstone-red',
-      'Sapphire': 'sapphire-gemstone-blue',
-      'Alexandrite': 'alexandrite-gemstone',
-      'Benitoite': 'benitoite-gemstone',
-      'Jadeite': 'jade-gemstone',
-      'Paraiba Tourmaline': 'tourmaline-gemstone',
-      'Red Spinel': 'spinel-gemstone',
-      'Agate': 'agate-stone',
-      'Amazonite': 'amazonite-gemstone',
-      'Amethyst': 'amethyst-gemstone-purple',
-      'Ametrine': 'ametrine-gemstone',
-      'Apatite': 'apatite-gemstone',
-      'Aquamarine': 'aquamarine-gemstone-blue',
-      'Aventurine': 'aventurine-stone',
-      'Bloodstone': 'bloodstone-gemstone',
-      'Carnelian': 'carnelian-gemstone',
-      'Chalcedony': 'chalcedony-gemstone',
-      'Chrysoprase': 'chrysoprase-gemstone',
-      'Citrine': 'citrine-gemstone-yellow',
-      'Fluorite': 'fluorite-gemstone',
-      'Garnet': 'garnet-gemstone-red',
-      'Goshenite': 'goshenite-gemstone',
-      'Heliodor': 'heliodor-gemstone',
-      'Hematite': 'hematite-mineral',
-      'Howlite': 'howlite-gemstone',
-      'Iolite': 'iolite-gemstone',
-      'Jasper': 'jasper-stone',
-      'Kyanite': 'kyanite-gemstone',
-      'Labradorite': 'labradorite-gemstone',
-      'Lapis Lazuli': 'lapis-lazuli-gemstone',
-      'Larimar': 'larimar-gemstone',
-      'Lepidolite': 'lepidolite-gemstone',
-      'Malachite': 'malachite-gemstone-green',
-      'Moonstone': 'moonstone-gemstone',
-      'Morganite': 'morganite-gemstone-pink',
-      'Obsidian': 'obsidian-stone',
-      'Onyx': 'onyx-stone-black',
-      'Opal': 'opal-gemstone',
-      'Peridot': 'peridot-gemstone-green',
-      'Prehnite': 'prehnite-gemstone',
-      'Pyrite': 'pyrite-mineral',
-      'Rainbow Moonstone': 'moonstone-gemstone',
-      'Rhodochrosite': 'rhodochrosite-gemstone',
-      'Rhodonite': 'rhodonite-gemstone',
-      'Rose Quartz': 'rose-quartz-gemstone',
-      'Serpentine': 'serpentine-stone',
-      'Smoky Quartz': 'smoky-quartz-gemstone',
-      'Sodalite': 'sodalite-gemstone',
-      'Spinel': 'spinel-gemstone',
-      'Sunstone': 'sunstone-gemstone',
-      'Tanzanite': 'tanzanite-gemstone',
-      'Tiger\'s Eye': 'tigers-eye-gemstone',
-      'Topaz': 'topaz-gemstone',
-      'Tourmaline': 'tourmaline-gemstone',
-      'Turquoise': 'turquoise-gemstone',
-      'Unakite': 'unakite-stone',
-      'Zircon': 'zircon-gemstone',
-      'Tsavorite': 'tsavorite-garnet',
-      'Dumortierite': 'dumortierite-gemstone',
-      'Amber': 'amber-gemstone',
-      'Ammolite': 'ammolite-gemstone',
-      'Coral': 'coral-gemstone',
-      'Pearl': 'pearl-gemstone',
-      'Mother-of-Pearl': 'mother-of-pearl',
-      'Jet': 'jet-gemstone',
-      'Ivory': 'ivory-gemstone'
+    // Map gem names to folder names in the train directory
+    // Handle special cases where folder names differ from gem names
+    const gemFolderMap = {
+      // Precious gems
+      'Diamond': 'Diamond',
+      'Emerald': 'Emerald',
+      'Ruby': 'Ruby',
+      'Sapphire': 'Sapphire Blue', // Default to Blue Sapphire
+      'Sapphire Blue': 'Sapphire Blue',
+      'Sapphire Pink': 'Sapphire Pink',
+      'Sapphire Purple': 'Sapphire Purple',
+      'Sapphire Yellow': 'Sapphire Yellow',
+      'Blue Sapphire': 'Sapphire Blue',
+      'Pink Sapphire': 'Sapphire Pink',
+      'Purple Sapphire': 'Sapphire Purple',
+      'Yellow Sapphire': 'Sapphire Yellow',
+      'Alexandrite': 'Alexandrite',
+      'Benitoite': 'Benitoite',
+      'Jadeite': 'Jade',
+      'Jade': 'Jade',
+      'Paraiba Tourmaline': 'Tourmaline',
+      'Red Spinel': 'Spinel',
+      'Spinel': 'Spinel',
+      'Agate': 'Blue Lace Agate', // Default to Blue Lace Agate
+      'Amazonite': 'Amazonite',
+      'Amethyst': 'Amethyst',
+      'Ametrine': 'Ametrine',
+      'Apatite': 'Aquamarine', // Use Aquamarine folder for apatite
+      'Aquamarine': 'Aquamarine',
+      'Aventurine': 'Aventurine Green', // Default to Green
+      'Aventurine Green': 'Aventurine Green',
+      'Aventurine Yellow': 'Aventurine Yellow',
+      'Bloodstone': 'Bloodstone',
+      'Carnelian': 'Carnelian',
+      'Chalcedony': 'Chalcedony',
+      'Chalcedony Blue': 'Chalcedony Blue',
+      'Chrysoprase': 'Chrysoprase',
+      'Citrine': 'Citrine',
+      'Fluorite': 'Fluorite',
+      'Garnet': 'Garnet Red', // Default to Red Garnet
+      'Garnet Red': 'Garnet Red',
+      'Goshenite': 'Goshenite',
+      'Heliodor': 'Beryl Golden', // Heliodor is golden beryl
+      'Hematite': 'hematite', // Use lowercase folder name
+      'Howlite': 'howlite', // Use lowercase folder name
+      'Iolite': 'Iolite',
+      'Jasper': 'Jasper',
+      'Kyanite': 'Kyanite',
+      'Labradorite': 'Labradorite',
+      'Lapis Lazuli': 'Lapis Lazuli',
+      'Larimar': 'Larimar',
+      'Lepidolite': 'lepidolite', // Use lowercase folder name
+      'Malachite': 'Malachite',
+      'Moonstone': 'Moonstone',
+      'Rainbow Moonstone': 'Moonstone',
+      'Morganite': 'Morganite',
+      'Obsidian': 'obsidian', // Use lowercase folder name
+      'Onyx': 'Onyx Black', // Default to Black Onyx
+      'Onyx Black': 'Onyx Black',
+      'Onyx Green': 'Onyx Green',
+      'Onyx Red': 'Onyx Red',
+      'Opal': 'Opal',
+      'Peridot': 'Peridot',
+      'Prehnite': 'Prehnite',
+      'Pyrite': 'Pyrite',
+      'Rhodochrosite': 'Rhodochrosite',
+      'Rhodolite': 'Rhodolite',
+      'Rhodonite': 'Rhodonite',
+      'Rose Quartz': 'Quartz Rose',
+      'Serpentine': 'Serpentine',
+      'Smoky Quartz': 'Quartz Smoky',
+      'Quartz': 'Quartz Beer', // Default
+      'Quartz Beer': 'Quartz Beer',
+      'Quartz Lemon': 'Quartz Lemon',
+      'Quartz Rose': 'Quartz Rose',
+      'Quartz Rutilated': 'Quartz Rutilated',
+      'Quartz Smoky': 'Quartz Smoky',
+      'Sodalite': 'Sodalite',
+      'Spessartite': 'Spessartite',
+      'Sunstone': 'Sunstone',
+      'Tanzanite': 'Tanzanite',
+      'Tiger\'s Eye': 'Tigers Eye',
+      'Topaz': 'Topaz',
+      'Tourmaline': 'Tourmaline',
+      'Turquoise': 'Turquoise',
+      'Unakite': 'Unakite',
+      'Zircon': 'Zircon',
+      'Tsavorite': 'Tsavorite',
+      'Dumortierite': 'Dumortierite',
+      'Amber': 'Amber',
+      'Ammolite': 'ammolite', // Use lowercase folder name
+      'Bone': 'bone', // Use lowercase folder name
+      'Bog Oak': 'bog oak', // Use lowercase folder name with space
+      'Coral': 'Coral',
+      'Copal': 'copal', // Use lowercase folder name
+      'Fossilized Wood': 'fossilized_wood', // Use lowercase folder name with underscore
+      'Ivory': 'ivory', // Use lowercase folder name
+      'Jet': 'jet', // Use lowercase folder name
+      'Nacre': 'nacre', // Use lowercase folder name
+      'Odontolite': 'odontolite', // Use lowercase folder name
+      'Pearl': 'Pearl',
+      'Mother-of-Pearl': 'Pearl', // Use Pearl folder images
+      'Mother of Pearl': 'Pearl', // Alternative naming
+      'Shell': 'shell', // Use lowercase folder name
+      // Additional mappings
+      'Almandine': 'Almandine',
+      'Andalusite': 'Andalusite',
+      'Andradite': 'Andradite',
+      'Beryl Golden': 'Beryl Golden',
+      'Bixbite': 'Bixbite',
+      'Blue Lace Agate': 'Blue Lace Agate',
+      'Cats Eye': 'Cats Eye',
+      'Chrome Diopside': 'Chrome Diopside',
+      'Chrysoberyl': 'Chrysoberyl',
+      'Chrysocolla': 'Chrysocolla',
+      'Danburite': 'Danburite',
+      'Diaspore': 'Diaspore',
+      'Grossular': 'Grossular',
+      'Hessonite': 'Hessonite',
+      'Hiddenite': 'Hiddenite',
+      'Kunzite': 'Kunzite',
+      'Pyrope': 'Pyrope',
+      'Scapolite': 'Scapolite',
+      'Sphene': 'Sphene',
+      'Spodumene': 'Spodumene',
+      'Variscite': 'Variscite',
+      'Zoisite': 'Zoisite',
+      'Tortoiseshell': 'Zoisite', // Use Zoisite folder for tortoiseshell
+      'Tagua Nut': 'Zoisite', // Use Zoisite folder for tagua nut
+      // Special Effects - map to appropriate gem folders for visual representation
+      'Opalescent': 'Moonstone', // Opalescent effect similar to moonstone
+      'Chatoyant': 'Cats Eye', // Chatoyant (cat's eye) effect
+      'Asterism': 'Sapphire Blue', // Asterism (star effect) often seen in sapphires
+      'Color Change': 'Alexandrite', // Color change effect like alexandrite
+      'Aventurescence': 'Aventurine Green', // Aventurescence effect from aventurine
+      'Labradorescence': 'Labradorite', // Labradorescence effect from labradorite
+      'Play of Color': 'Opal', // Play of color effect from opal
+      // Man-Made / Synthetic gems - map to similar natural gem folders
+      'Synthetic Diamond': 'Diamond',
+      'Synthetic Ruby': 'Ruby',
+      'Synthetic Sapphire': 'Sapphire Blue',
+      'Synthetic Spinel': 'Spinel',
+      'Synthetic Quartz': 'Quartz Beer',
+      'Synthetic Quartz Crystal Clusters': 'Quartz Beer',
+      'Synthetic Emerald': 'Emerald',
+      'Synthetic Alexandrite': 'Alexandrite',
+      'Synthetic Moissanite': 'Diamond', // Moissanite looks similar to diamond
+      'Synthetic Aquamarine': 'Aquamarine',
+      'Synthetic Topaz': 'Topaz',
+      'Synthetic Opal': 'Opal',
+      'Synthetic Opal Doublet': 'Opal',
+      'Synthetic Jadeite': 'Jade',
+      'Synthetic Lapis Lazuli': 'Lapis Lazuli',
+      'Synthetic Turquoise': 'Turquoise',
+      'Synthetic Malachite': 'Malachite',
+      'Cubic Zirconia': 'Zircon', // CZ is similar to zircon
+      'Opalite': 'Opal', // Opalite is similar to opal
+      'Swarovski Crystal': 'Diamond', // Swarovski crystals are clear/faceted like diamonds
+      'Bismuth Crystal': 'Opal', // Bismuth has iridescent colors like opal
+      'Glass Gemstones': 'Hiddenite', // Use Hiddenite folder for glass gemstones
+      'Goldstone': 'Pyrite', // Goldstone has sparkly appearance like pyrite
+      'Lab-Created Garnet': 'Garnet Red',
+      'Lab-Created Emerald Overgrowth': 'Emerald',
+      'Reconstituted Stones': 'Opal', // Often opal-like
+      'Foil-Backed or Coated Stones': 'Opal', // Often have iridescent appearance
+      'Girdled Stones': 'Diamond', // Typically faceted like diamonds
+      'Resin-Impregnated Stones': 'Opal', // Often opal-like
+      'Acrylic / Polymer Gems': 'Opal', // Often have colorful/iridescent appearance
+      'Neoceram': 'Opal', // Glass ceramic, often opal-like
+      'Glass-filled Gems': 'Opal', // Often opal-like
+      'Iridescent Glass': 'Opal', // Iridescent like opal
+      'Triplets & Doublets': 'Opal', // Often opal-based
     }
     
-    const searchTerm = searchTerms[gemName] || gemName.toLowerCase().replace(/\s+/g, '-') + '-gemstone'
+    // Get folder name, fallback to gem name if not mapped
+    let folderName = gemFolderMap[gemName]
     
-    // Use Unsplash Source API - provides real gemstone photos
-    // Format: https://source.unsplash.com/featured/400x400/?{search-term}
-    return `https://source.unsplash.com/featured/400x400/?${searchTerm}`
+    // Special case: Mother-of-Pearl uses pearl_9.jpg specifically
+    if (gemName === 'Mother-of-Pearl' || gemName === 'Mother of Pearl') {
+      return `/assets/images/archive/train/Pearl/pearl_9.jpg`
+    }
+    
+    // Special case: Apatite uses aquamarine_35.jpg specifically
+    if (gemName === 'Apatite') {
+      return `/assets/images/archive/train/Aquamarine/aquamarine_35.jpg`
+    }
+    
+    // Special case: Tortoiseshell uses zoisite_16.jpg specifically
+    if (gemName === 'Tortoiseshell') {
+      return `/assets/images/archive/train/Zoisite/zoisite_16.jpg`
+    }
+    
+    // Special case: Tagua Nut uses zoisite_1.jpg specifically
+    if (gemName === 'Tagua Nut') {
+      return `/assets/images/archive/train/Zoisite/zoisite_1.jpg`
+    }
+    
+    // If not found in map, try to match folder name directly (case-insensitive)
+    if (!folderName) {
+      // Try exact match first
+      folderName = gemName
+    }
+    
+    // For Man-Made gems that map to the same folder, use different image indices
+    // IMPORTANT: Start from index 10+ to avoid conflicts with natural gems (which use 0-9)
+    // This ensures Man-Made gems don't use images already used by Precious, Semi-Precious, or Organic gems
+    const manMadeImageIndices = {
+      // Diamond folder (multiple Man-Made gems use this)
+      // Natural Diamond uses index 0, so Man-Made start from 10+
+      'Synthetic Diamond': 7, // Use diamond_7.jpg specifically (as requested)
+      'Synthetic Moissanite': 10,
+      'Swarovski Crystal': 11,
+      'Girdled Stones': 12,
+      // Opal folder (multiple Man-Made gems use this)
+      // Natural Opal uses index 0, so Man-Made start from 10+
+      'Synthetic Opal': 32, // Use opal_32.jpg specifically
+      'Synthetic Opal Doublet': 11,
+      'Opalite': 12,
+      'Bismuth Crystal': 13,
+      'Glass Gemstones': 6, // Use hiddenite_6.jpg specifically
+      'Reconstituted Stones': 15,
+      'Foil-Backed or Coated Stones': 16,
+      'Resin-Impregnated Stones': 17,
+      'Acrylic / Polymer Gems': 18,
+      'Neoceram': 19,
+      'Glass-filled Gems': 20,
+      'Iridescent Glass': 21,
+      'Triplets & Doublets': 22,
+      // Ruby folder
+      'Synthetic Ruby': 10, // Natural Ruby uses 0
+      // Sapphire folder
+      'Synthetic Sapphire': 10, // Natural Sapphire uses 0
+      // Spinel folder
+      'Synthetic Spinel': 10, // Natural Spinel uses 0
+      // Quartz folder (multiple Man-Made gems use this)
+      'Synthetic Quartz': 10, // Natural Quartz uses 0
+      'Synthetic Quartz Crystal Clusters': 11,
+      // Emerald folder
+      'Synthetic Emerald': 10, // Natural Emerald uses 0
+      'Lab-Created Emerald Overgrowth': 11,
+      // Alexandrite folder
+      'Synthetic Alexandrite': 10, // Natural Alexandrite uses 0
+      // Aquamarine folder
+      'Synthetic Aquamarine': 10, // Natural Aquamarine uses 0
+      // Topaz folder
+      'Synthetic Topaz': 10, // Natural Topaz uses 0
+      // Jade folder
+      'Synthetic Jadeite': 10, // Natural Jade uses 0
+      // Lapis Lazuli folder
+      'Synthetic Lapis Lazuli': 10, // Natural Lapis Lazuli uses 0
+      // Turquoise folder
+      'Synthetic Turquoise': 10, // Natural Turquoise uses 0
+      // Malachite folder
+      'Synthetic Malachite': 10, // Natural Malachite uses 0
+      // Zircon folder
+      'Cubic Zirconia': 10, // Natural Zircon uses 0
+      // Pyrite folder
+      'Goldstone': 10, // Natural Pyrite uses 0
+      // Garnet Red folder
+      'Lab-Created Garnet': 10, // Natural Garnet Red uses 0
+    }
+    
+    // Special cases for gems with .jpeg files in lowercase folders or root
+    const jpegGems = {
+      'Ammolite': 'ammolite',
+      'Bone': 'bone',
+      'Bog Oak': 'bog oak',
+      'Copal': 'copal',
+      'Fossilized Wood': 'fossilized_wood',
+      'Hematite': 'hematite', // Note: filename is hemetite.jpeg (typo in filename)
+      'Howlite': 'howlite',
+      'Ivory': 'ivory',
+      'Jet': 'jet',
+      'Lepidolite': 'lepidolite',
+      'Nacre': 'nacre',
+      'Obsidian': 'obsidian',
+      'Odontolite': 'odontolite',
+      'Shell': 'shell',
+      'Unakite': 'unakite'
+    }
+    
+    // Man-Made gems with .jpeg files in the root of train folder
+    const rootJpegGems = {
+      'Bismuth Crystal': 'bismuth.jpeg',
+      'Foil-Backed or Coated Stones': 'foil_backed.jpeg',
+      'Glass-filled Gems': 'glass_filled_gem.jpeg',
+      'Iridescent Glass': 'iredescent.jpeg', // Note: typo in filename
+      'Neoceram': 'neoceram.jpeg',
+      'Reconstituted Stones': 'reconstituted_stones.jpeg',
+      'Resin-Impregnated Stones': 'basin_impregnated .jpeg', // Note: space in filename
+      'Triplets & Doublets': 'triplet_&_double.jpeg',
+      // Extended Natural gems with .jpeg files in root
+      'Amblygonite': 'amblygonite.jpeg',
+      'Austrophyllite': 'austrophyllite.jpeg',
+      'Axinite': 'axinite.jpeg',
+      'Azurite': 'azurite.jpeg',
+      'Beryl (RARE types)': 'beryl.jpeg',
+      'Brookite': 'brookite.jpeg',
+      'Cassiterite': 'cassiterite.jpeg',
+      'Charoite': 'charoite.jpeg',
+      'Clinohumite': 'clinohumite.jpeg',
+      'Diaspore': 'diaspore.jpeg',
+      'Diaspore (Zultanite)': 'diaspore.jpeg',
+      'Dioptase': 'dioptase.jpeg',
+      'Dravite': 'dravite.jpeg',
+      'Ekanite': 'ekanite.jpeg',
+      'Enstatite': 'enstatite.jpeg',
+      'Euclase': 'euclase.jpeg',
+      'Fluorite': 'fluorite.jpeg',
+      'Fluorite (Collector-grade)': 'fluorite.jpeg',
+      'Gaspeite': 'gaspeite.jpeg',
+      'Grandidierite': 'grandidierite.jpeg',
+      'Hackmanite': 'hackmanite.jpeg',
+      'Hemimorphite': 'hemimorphite.jpeg',
+      'Idocrase (Vesuvianite)': 'vesuvianite.jpeg', // Use vesuvianite.jpeg (newer file)
+      'Iolite': 'lolite.jpeg', // Note: typo in filename (lolite instead of iolite)
+      'Iolite (Uncommon grades)': 'lolite.jpeg',
+      'Jeremejevite': 'jeremejevite.jpeg',
+      'Kämmererite': 'kammererite.jpeg',
+      'Kornerupine': 'kornerupine.jpeg',
+      'Kudite': 'kudite.jpeg',
+      'Lazulite': 'lazulite.jpeg',
+      'Liddicoatite': 'liddicoatite.jpeg',
+      'Magnesite': 'magnesite.jpeg',
+      'Musgravite': 'musgravite.jpeg',
+      'Muscovite': 'muscovite.jpeg',
+      'Painite': 'painite.jpeg',
+      'Pectolite': 'pectolite.jpeg',
+      'Petalite': 'petalite.jpeg',
+      'Pietersite': 'pietersite.jpeg',
+      'Poudretteite': 'poudretteite.jpeg',
+      'Prehnite': 'prehnite.jpeg', // Root .jpeg file (Prehnite also has a folder)
+      'Prehnite (Collector grades)': 'prehnite.jpeg',
+      'Seraphinite': 'seraphinite.jpeg',
+      'Serendibite': 'serendibite.jpeg',
+      'Shattuckite': 'shattuckite.jpeg',
+      'Smithsonite': 'smithsonite.jpeg',
+      'Sphalerite': 'sphalerite.jpeg',
+      'Sphene': 'sphene_titanite .jpeg', // Note: space in filename
+      'Sphene (Titanite)': 'sphene_titanite .jpeg', // Note: space in filename
+      'Stichtite': 'stichtite.jpeg',
+      'Sugilite': 'sugilite.jpeg',
+      'Taaffeite': 'taaffeite.jpeg',
+      'Thulite': 'thulite.jpeg',
+      'Tremolite': 'tremolite.jpeg',
+      'Vesuvianite': 'vesuvianite.jpeg',
+      'Idocrase (Vesuvianite)': 'vesuvianite.jpeg', // Also map Idocrase to vesuvianite
+      // Special Effects - map to appropriate images
+      'Iridescent': 'iredescent.jpeg' // Note: typo in filename - this is a root .jpeg file
+    }
+    
+    // Check for root-level .jpeg files first
+    if (rootJpegGems[gemName]) {
+      return `/assets/images/archive/train/${rootJpegGems[gemName]}`
+    }
+    
+    if (jpegGems[gemName]) {
+      const folder = jpegGems[gemName]
+      // Handle special case for Hematite (typo in filename: hemetite.jpeg)
+      if (gemName === 'Hematite') {
+        return `/assets/images/archive/train/${folder}/hemetite.jpeg`
+      }
+      // Handle special case for Bog Oak (filename: bog_oak.jpeg)
+      if (gemName === 'Bog Oak') {
+        return `/assets/images/archive/train/${folder}/bog_oak.jpeg`
+      }
+      // Handle special case for Fossilized Wood (filename: fossilized_wood.jpeg)
+      if (gemName === 'Fossilized Wood') {
+        return `/assets/images/archive/train/${folder}/fossilized_wood.jpeg`
+      }
+      // Default: use gem name in lowercase with .jpeg
+      const gemNameLower = gemName.toLowerCase().replace(/\s+/g, '_')
+      return `/assets/images/archive/train/${folder}/${gemNameLower}.jpeg`
+    }
+    
+    // Get image index for Man-Made gems, default to 0 for natural gems
+    const imageIndex = manMadeImageIndices[gemName] !== undefined ? manMadeImageIndices[gemName] : 0
+    
+    // Use the specified image index from the folder
+    // Format: /assets/images/archive/train/{folderName}/{gemName}_{index}.jpg
+    const gemNameLower = folderName.toLowerCase()
+    return `/assets/images/archive/train/${folderName}/${gemNameLower}_${imageIndex}.jpg`
   }
   
-  // Get alternative image URLs for fallback
+  // Get alternative image URLs for fallback - try different image indices from the same folder
   const getGemImageFallbacks = (gemName) => {
-    const searchTerm = gemName.toLowerCase().replace(/\s+/g, '-') + '-gemstone'
+    // Use the same mapping as getGemImagePath
+    const gemFolderMap = {
+      'Diamond': 'Diamond', 'Emerald': 'Emerald', 'Ruby': 'Ruby', 'Sapphire': 'Sapphire Blue',
+      'Sapphire Blue': 'Sapphire Blue', 'Sapphire Pink': 'Sapphire Pink', 'Sapphire Purple': 'Sapphire Purple', 'Sapphire Yellow': 'Sapphire Yellow',
+      'Alexandrite': 'Alexandrite', 'Benitoite': 'Benitoite', 'Jadeite': 'Jade', 'Jade': 'Jade',
+      'Paraiba Tourmaline': 'Tourmaline', 'Red Spinel': 'Spinel', 'Spinel': 'Spinel',
+      'Agate': 'Blue Lace Agate', 'Amazonite': 'Amazonite', 'Amethyst': 'Amethyst', 'Ametrine': 'Ametrine',
+      'Apatite': 'Aquamarine', 'Aquamarine': 'Aquamarine', 'Aventurine': 'Aventurine Green',
+      'Aventurine Green': 'Aventurine Green', 'Aventurine Yellow': 'Aventurine Yellow',
+      'Bloodstone': 'Bloodstone', 'Carnelian': 'Carnelian', 'Chalcedony': 'Chalcedony', 'Chalcedony Blue': 'Chalcedony Blue',
+      'Chrysoprase': 'Chrysoprase', 'Citrine': 'Citrine', 'Fluorite': 'Fluorite',
+      'Garnet': 'Garnet Red', 'Garnet Red': 'Garnet Red', 'Goshenite': 'Goshenite',
+      'Heliodor': 'Beryl Golden', 'Hematite': 'hematite', 'Howlite': 'howlite', 'Iolite': 'Iolite',
+      'Jasper': 'Jasper', 'Kyanite': 'Kyanite', 'Labradorite': 'Labradorite', 'Lapis Lazuli': 'Lapis Lazuli',
+      'Larimar': 'Larimar', 'Lepidolite': 'lepidolite', 'Malachite': 'Malachite', 'Moonstone': 'Moonstone',
+      'Rainbow Moonstone': 'Moonstone', 'Morganite': 'Morganite', 'Obsidian': 'obsidian',
+      'Onyx': 'Onyx Black', 'Onyx Black': 'Onyx Black', 'Onyx Green': 'Onyx Green', 'Onyx Red': 'Onyx Red',
+      'Opal': 'Opal', 'Peridot': 'Peridot', 'Prehnite': 'Prehnite', 'Pyrite': 'Pyrite',
+      'Rhodochrosite': 'Rhodochrosite', 'Rhodolite': 'Rhodolite', 'Rhodonite': 'Rhodonite',
+      'Rose Quartz': 'Quartz Rose', 'Serpentine': 'Serpentine', 'Smoky Quartz': 'Quartz Smoky',
+      'Quartz': 'Quartz Beer', 'Quartz Beer': 'Quartz Beer', 'Quartz Lemon': 'Quartz Lemon',
+      'Quartz Rose': 'Quartz Rose', 'Quartz Rutilated': 'Quartz Rutilated', 'Quartz Smoky': 'Quartz Smoky',
+      'Sodalite': 'Sodalite', 'Spessartite': 'Spessartite', 'Sunstone': 'Sunstone', 'Tanzanite': 'Tanzanite',
+      'Tiger\'s Eye': 'Tigers Eye', 'Topaz': 'Topaz', 'Tourmaline': 'Tourmaline', 'Turquoise': 'Turquoise',
+      'Unakite': 'unakite', 'Zircon': 'Zircon', 'Tsavorite': 'Tsavorite', 'Dumortierite': 'Dumortierite',
+      'Amber': 'Amber', 'Ammolite': 'ammolite', 'Bone': 'bone', 'Bog Oak': 'bog oak',
+      'Coral': 'Coral', 'Copal': 'copal', 'Fossilized Wood': 'fossilized_wood',
+      'Ivory': 'ivory', 'Jet': 'jet', 'Nacre': 'nacre', 'Odontolite': 'odontolite',
+      'Pearl': 'Pearl', 'Mother-of-Pearl': 'Pearl', 'Mother of Pearl': 'Pearl', 'Shell': 'shell',
+      'Almandine': 'Almandine', 'Andalusite': 'Andalusite', 'Andradite': 'Andradite', 'Beryl Golden': 'Beryl Golden',
+      'Bixbite': 'Bixbite', 'Blue Lace Agate': 'Blue Lace Agate', 'Cats Eye': 'Cats Eye',
+      'Chrome Diopside': 'Chrome Diopside', 'Chrysoberyl': 'Chrysoberyl', 'Chrysocolla': 'Chrysocolla',
+      'Danburite': 'Danburite', 'Diaspore': 'Diaspore', 'Grossular': 'Grossular', 'Hessonite': 'Hessonite',
+      'Hiddenite': 'Hiddenite', 'Kunzite': 'Kunzite', 'Pyrope': 'Pyrope',       'Scapolite': 'Scapolite',
+      'Sphene': 'Sphene', 'Spodumene': 'Spodumene', 'Variscite': 'Variscite', 'Zoisite': 'Zoisite', 'Tortoiseshell': 'Zoisite', 'Tagua Nut': 'Zoisite',
+      // Man-Made / Synthetic gems - map to similar natural gem folders (same as main mapping)
+      'Synthetic Diamond': 'Diamond', 'Synthetic Ruby': 'Ruby', 'Synthetic Sapphire': 'Sapphire Blue',
+      'Synthetic Spinel': 'Spinel', 'Synthetic Quartz': 'Quartz Beer', 'Synthetic Quartz Crystal Clusters': 'Quartz Beer',
+      'Synthetic Emerald': 'Emerald', 'Synthetic Alexandrite': 'Alexandrite', 'Synthetic Moissanite': 'Diamond',
+      'Synthetic Aquamarine': 'Aquamarine', 'Synthetic Topaz': 'Topaz', 'Synthetic Opal': 'Opal',
+      'Synthetic Opal Doublet': 'Opal', 'Synthetic Jadeite': 'Jade', 'Synthetic Lapis Lazuli': 'Lapis Lazuli',
+      'Synthetic Turquoise': 'Turquoise', 'Synthetic Malachite': 'Malachite', 'Cubic Zirconia': 'Zircon',
+      'Opalite': 'Opal', 'Swarovski Crystal': 'Diamond', 'Bismuth Crystal': 'Opal', 'Glass Gemstones': 'Hiddenite',
+      'Goldstone': 'Pyrite',
+      'Lab-Created Garnet': 'Garnet Red', 'Lab-Created Emerald Overgrowth': 'Emerald',
+      'Reconstituted Stones': 'Opal', 'Foil-Backed or Coated Stones': 'Opal', 'Girdled Stones': 'Diamond',
+      'Resin-Impregnated Stones': 'Opal', 'Acrylic / Polymer Gems': 'Opal', 'Neoceram': 'Opal',
+      'Glass-filled Gems': 'Opal', 'Iridescent Glass': 'Opal', 'Triplets & Doublets': 'Opal',
+    }
     
+    const folderName = gemFolderMap[gemName] || gemName
+    // Keep spaces in filename to match actual file naming (e.g., "sapphire blue_0.jpg" not "sapphire_blue_0.jpg")
+    const gemNameLower = folderName.toLowerCase()
+    
+    // Try different image indices (1, 2, 3, etc.) as fallbacks
     return [
-      `https://source.unsplash.com/featured/400x400/?gemstone`, // Generic gemstone
-      `https://source.unsplash.com/featured/400x400/?jewelry-gemstone`, // Jewelry gemstone
-      `https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80`, // Real gemstone photo
-      `https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop&q=80`, // Gemstone collection
+      `/assets/images/archive/train/${folderName}/${gemNameLower}_1.jpg`,
+      `/assets/images/archive/train/${folderName}/${gemNameLower}_2.jpg`,
+      `/assets/images/archive/train/${folderName}/${gemNameLower}_3.jpg`,
+      `/assets/images/archive/train/${folderName}/${gemNameLower}_4.jpg`,
       `https://via.placeholder.com/400/533e17/fffe88?text=${encodeURIComponent(gemName.substring(0, 10))}` // Final placeholder fallback
     ]
   }
@@ -744,6 +1106,102 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
     return organized
   }
 
+  // Get diamond color hex code for SVG fill - uses the actual color codes
+  const getDiamondColorSVGFill = (colorName) => {
+    // Use the actual color hex code from getColorHex
+    return getColorHex(colorName)
+  }
+
+  // Load and modify SVG for diamond colors
+  const [diamondSVG, setDiamondSVG] = React.useState(null)
+  
+  React.useEffect(() => {
+    fetch('/assets/colors/stone.svg')
+      .then(response => response.text())
+      .then(svgText => {
+        setDiamondSVG(svgText)
+        console.log('SVG loaded successfully, length:', svgText.length)
+      })
+      .catch(error => {
+        console.error('Error loading SVG:', error)
+      })
+  }, [])
+
+  // Function to modify SVG fill colors for gem colors
+  const getModifiedSVG = (colorName) => {
+    if (!diamondSVG) return null
+    
+    // Use the actual color hex code from getColorHex for all gem colors
+    const fillColor = getColorHex(colorName)
+    if (!fillColor) return null
+    
+    // Replace all fill attributes in the SVG with the gem color
+    // Handle both fill="..." and fill='...' formats
+    // Also replace fill="none" to ensure all paths get the color
+    let modifiedSVG = diamondSVG
+    // Replace fill with double quotes (including fill="none")
+    modifiedSVG = modifiedSVG.replace(/fill="[^"]*"/g, `fill="${fillColor}"`)
+    // Replace fill with single quotes (including fill='none')
+    modifiedSVG = modifiedSVG.replace(/fill='[^']*'/g, `fill="${fillColor}"`)
+    
+    // For paths without fill attributes, add fill attribute
+    // Match <path ... > and add fill if it doesn't exist
+    modifiedSVG = modifiedSVG.replace(/<path([^>]*?)(?:\s+fill="[^"]*")?([^>]*?)>/g, (match, before, after) => {
+      // Check if fill already exists in this path
+      if (match.includes('fill=')) {
+        return match // Already has fill, will be replaced by previous regex
+      }
+      // Add fill attribute before the closing >
+      return `<path${before}${after} fill="${fillColor}">`
+    })
+    
+    // Ensure SVG has proper width/height and background
+    // Add style to SVG element if it doesn't have one
+    if (!modifiedSVG.includes('style=')) {
+      modifiedSVG = modifiedSVG.replace(/<svg([^>]*)>/, `<svg$1 style="width: 100%; height: 100%; background: transparent; display: block;">`)
+    } else {
+      modifiedSVG = modifiedSVG.replace(/style="([^"]*)"/, (match, styles) => {
+        let newStyles = styles
+        if (!styles.includes('background')) {
+          newStyles += '; background: transparent;'
+        }
+        if (!styles.includes('display')) {
+          newStyles += '; display: block;'
+        }
+        if (!styles.includes('width')) {
+          newStyles += '; width: 100%;'
+        }
+        if (!styles.includes('height')) {
+          newStyles += '; height: 100%;'
+        }
+        return `style="${newStyles}"`
+      })
+    }
+    
+    // Also ensure SVG has width and height attributes and preserveAspectRatio
+    // First, ensure preserveAspectRatio is set
+    if (!modifiedSVG.includes('preserveAspectRatio=')) {
+      modifiedSVG = modifiedSVG.replace(/<svg([^>]*)>/, (match) => {
+        return match.replace('>', ' preserveAspectRatio="xMidYMid meet">')
+      })
+    }
+    
+    // Then ensure width and height are set
+    if (!modifiedSVG.includes('width=')) {
+      modifiedSVG = modifiedSVG.replace(/<svg([^>]*)>/, `<svg$1 width="100%" height="100%">`)
+    }
+    if (!modifiedSVG.includes('height=')) {
+      modifiedSVG = modifiedSVG.replace(/<svg([^>]*)>/, (match) => {
+        if (!match.includes('height=')) {
+          return match.replace('>', ' height="100%">')
+        }
+        return match
+      })
+    }
+    
+    return modifiedSVG
+  }
+
   // Get hex color for color name - realistic luxury material colors
   const getColorHex = (colorName) => {
     const colorMap = {
@@ -868,8 +1326,7 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
     return colorMap[colorName] || '#6B6B6B'
   }
 
-  // Get colors for specific gem
-  const getGemColors = (gemName) => {
+  // Gem color map - defined for logging access
     const gemColorMap = {
       // Precious Gems
       'Diamond': ['Colorless', 'Near Colorless', 'Faint Yellow', 'Light Yellow', 'Very Light Yellow', 'Fancy Yellow', 'Fancy Intense Yellow', 'Fancy Vivid Yellow', 'Fancy Pink', 'Fancy Intense Pink', 'Fancy Vivid Pink', 'Fancy Blue', 'Fancy Intense Blue', 'Fancy Vivid Blue', 'Fancy Green', 'Fancy Intense Green', 'Fancy Vivid Green', 'Fancy Brown', 'Fancy Intense Brown', 'Fancy Orange', 'Fancy Red', 'Fancy Purple', 'Fancy Deep', 'Fancy Dark', 'Fancy Light'],
@@ -977,9 +1434,6 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
       'Bismuth Crystal': ['Blue', 'Purple', 'Yellow', 'Iridescent'],
       'Glass Gemstones': ['Blue', 'Pink', 'Yellow', 'Green', 'Purple', 'Red', 'Colorless'],
       'Goldstone': ['Blue', 'Brown', 'Green', 'Purple'],
-      'Paste': ['Blue', 'Pink', 'Yellow', 'Green', 'Purple', 'Red', 'Colorless'],
-      'YAG': ['Colorless', 'Blue', 'Pink', 'Yellow', 'Green'],
-      'GGG': ['Colorless', 'Blue', 'Pink', 'Yellow', 'Green'],
       'Lab-Created Garnet': ['Red', 'Pink', 'Orange', 'Green', 'Purple'],
       'Neoceram': ['Blue', 'Green', 'Purple', 'Iridescent'],
       'Glass-filled Gems': ['Red', 'Blue', 'Green', 'Purple', 'Yellow'],
@@ -1084,8 +1538,41 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
       'Play of Color': ['Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple', 'Iridescent']
     }
     
+  // Get colors for specific gem
+  const getGemColors = (gemName) => {
     return gemColorMap[gemName] || []
   }
+
+  // Log all unique color names used across all gems
+  useEffect(() => {
+    const allColorNames = new Set()
+    
+    // Collect all colors from all gems (excluding Colour Families, Textures, and Special Effects)
+    const gemOnlyColors = Object.entries(gemColorMap).filter(([key]) => {
+      return !['Warm', 'Cool', 'Neutral', 'Pastel', 'Vibrant', 'Muted', 'Earth Tones', 'Jewel Tones', 'Metallic',
+               'Smooth', 'Textured', 'Faceted', 'Matte', 'Semi-Gloss', 'Glossy', 'Polished', 'Rough',
+               'Opalescent', 'Chatoyant', 'Asterism', 'Color Change', 'Aventurescence', 'Labradorescence', 'Play of Color'].includes(key)
+    })
+    
+    gemOnlyColors.forEach(([gemName, colors]) => {
+      colors.forEach(colorName => allColorNames.add(colorName))
+    })
+    
+    // Convert to sorted array
+    const sortedColorNames = Array.from(allColorNames).sort()
+    
+    console.log('=== ALL GEM COLOR NAMES ===')
+    console.log(`Total unique color names: ${sortedColorNames.length}`)
+    console.log('Color Names:', sortedColorNames)
+    console.log('=====================')
+    
+    // Also log by gem for reference
+    console.log('=== COLORS BY GEM ===')
+    gemOnlyColors.forEach(([gemName, colors]) => {
+      console.log(`${gemName}:`, colors)
+    })
+    console.log('=====================')
+  }, []) // Run once on mount
 
   // Get color content based on selected gem
   const getColorContent = (gemCategory, gemName) => {
@@ -1240,6 +1727,172 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
     return false
   }
 
+  // Save and restore colors when switching features/tabs
+  useEffect(() => {
+    // For Gems, use 'Gems:default' for all categories
+    // For other features, use category-specific keys
+    const featureKey = (activeFeature === 'Gems') 
+      ? 'Gems:default' 
+      : `${activeFeature}:${activeCategory || 'default'}`
+    const previousFeature = previousFeatureRef.current
+    const previousCategory = previousCategoryRef.current
+    
+    // Save current selection when feature changes (not when category changes)
+    if (previousFeature && previousFeature !== activeFeature) {
+      // For Gems, use 'Gems:default' for all categories
+      const prevFeatureKey = (previousFeature === 'Gems') 
+        ? 'Gems:default' 
+        : `${previousFeature}:${previousCategory || 'default'}`
+      if (configState.selectedColorName) {
+        featureColorsRef.current[prevFeatureKey] = {
+          colorName: configState.selectedColorName,
+          gridItem: selectedGridItem,
+          gem: selectedGem
+        }
+      }
+    }
+    
+    // Restore selection for new feature (only when feature actually changes, not category)
+    // For Crown and Cascade, don't restore from featureColorsRef - use Canvas's stored colors instead
+    // This prevents overwriting the initial default colors
+    if (previousFeature !== activeFeature && featureColorsRef.current[featureKey]) {
+      const saved = featureColorsRef.current[featureKey]
+      // Only restore if it's not Crown or Cascade (they use Canvas's lastAppliedColors)
+      if (activeFeature !== 'Crown' && activeFeature !== 'Cascade') {
+        if (saved.colorName) {
+          updateConfigState({ selectedColorName: saved.colorName })
+        }
+        if (saved.gridItem !== null && saved.gridItem !== undefined) {
+          setSelectedGridItem(saved.gridItem)
+        }
+        if (saved.gem && saved.gem.gemName) {
+          setSelectedGem(saved.gem)
+        }
+      } else {
+        // For Crown and Cascade, clear selectedColorName - Canvas will use stored color
+        // This ensures the stored color (from initialization) is used, not overwritten
+        updateConfigState({ selectedColorName: null })
+        setSelectedGridItem(null)
+      }
+    } else if (previousFeature !== activeFeature && (activeFeature === 'Crown' || activeFeature === 'Cascade')) {
+      // Switching to Crown or Cascade but no saved selection in featureColorsRef
+      // Clear selectedColorName so Canvas uses its stored color
+      updateConfigState({ selectedColorName: null })
+      setSelectedGridItem(null)
+    }
+    
+    // When category changes within the same feature, save current selection
+    // For Gems, use a single key for all categories - one color applies to all gem categories
+    if (previousFeature === activeFeature && previousCategory !== activeCategory) {
+      // For Gems, save to 'Gems:default' (applies to all categories)
+      // For other features, use category-specific keys
+      const saveKey = (activeFeature === 'Gems') 
+        ? 'Gems:default' 
+        : `${activeFeature}:${previousCategory || 'default'}`
+      
+      // Save current selection
+      if (configState.selectedColorName || selectedGridItem !== null || (selectedGem.gemName && activeFeature === 'Gems')) {
+        featureColorsRef.current[saveKey] = {
+          colorName: configState.selectedColorName,
+          gridItem: selectedGridItem,
+          gem: selectedGem
+        }
+      }
+      
+      // For Gems, restore the saved selection (same color applies to all categories)
+      if (activeFeature === 'Gems') {
+        const gemsKey = 'Gems:default'
+        const saved = featureColorsRef.current[gemsKey]
+        if (saved) {
+          if (saved.gem && saved.gem.gemName) {
+            setSelectedGem(saved.gem)
+            if (saved.gridItem !== null && saved.gridItem !== undefined) {
+              setSelectedGridItem(saved.gridItem)
+            }
+          }
+          if (saved.colorName) {
+            updateConfigState({ selectedColorName: saved.colorName })
+          }
+        } else {
+          // No saved selection - clear UI
+          setSelectedGridItem(null)
+          setSelectedGem({ category: activeCategory, itemIndex: null, gemName: null })
+          updateConfigState({ selectedColorName: null })
+        }
+      } else {
+        // For other features, restore category-specific selection
+        const restoreKey = `${activeFeature}:${activeCategory || 'default'}`
+        const saved = featureColorsRef.current[restoreKey]
+        if (saved && saved.gridItem !== null && saved.gridItem !== undefined) {
+          setSelectedGridItem(saved.gridItem)
+          if (saved.colorName) {
+            updateConfigState({ selectedColorName: saved.colorName })
+          }
+        } else {
+          // No saved selection - clear UI
+          setSelectedGridItem(null)
+          updateConfigState({ selectedColorName: null })
+        }
+      }
+    }
+    
+    previousFeatureRef.current = activeFeature
+    previousCategoryRef.current = activeCategory
+  }, [activeFeature, activeCategory])
+  
+  // Sync selectedGridItem with selectedGem and selectedColorName
+  // Only sync when there's an explicit selection - don't auto-select anything
+  // Use a ref to track if we should sync (to avoid conflicts with user clicks)
+  const shouldSyncGridItemRef = useRef(true)
+  
+  useEffect(() => {
+    if (activeFeature === 'Gems' && shouldSyncGridItemRef.current) {
+      if (shouldShowColors() && selectedGem.gemName) {
+        // When showing colors, sync selectedGridItem with selectedColorName
+        const selectedColorName = configState.selectedColorName
+        if (selectedColorName) {
+          // Get the colors for the selected gem
+          const gemColors = getGemColors(selectedGem.gemName)
+          // Get the organized content to find the correct index (same logic as in render)
+          const isColorContent = shouldShowColors() && activeCategory !== 'Special Effects' && activeCategory !== 'Colour Families' && activeCategory !== 'Textures'
+          const organizedContent = isColorContent ? organizeColorsByFamily(gemColors) : gemColors
+          
+          // Find the index in the organized content array
+          const colorIndex = organizedContent.findIndex(item => {
+            const itemName = typeof item === 'object' && item.color ? item.color : item
+            return itemName === selectedColorName
+          })
+          
+          if (colorIndex !== -1 && selectedGridItem !== colorIndex) {
+            setSelectedGridItem(colorIndex)
+          }
+        }
+      } else if (!shouldShowColors()) {
+        // When showing gems, sync selectedGridItem with selectedGem.itemIndex
+        // Only sync if itemIndex is explicitly set (not null)
+        if (selectedGem.itemIndex !== null && selectedGem.itemIndex !== undefined) {
+          if (selectedGridItem !== selectedGem.itemIndex) {
+            setSelectedGridItem(selectedGem.itemIndex)
+          }
+        }
+      }
+    }
+    // Re-enable syncing after a short delay to allow user clicks to complete
+    const timeout = setTimeout(() => {
+      shouldSyncGridItemRef.current = true
+    }, 100)
+    return () => clearTimeout(timeout)
+  }, [configState.selectedColorName, selectedGem.gemName, selectedGem.itemIndex, activeFeature, activeCategory])
+  
+  // Disable syncing when user clicks on a card
+  const handleCardClick = (callback) => {
+    shouldSyncGridItemRef.current = false
+    callback()
+    setTimeout(() => {
+      shouldSyncGridItemRef.current = true
+    }, 200)
+  }
+
   // Content items for each category
   const getCategoryContent = (category) => {
     // For Crown and Cascade features, show ALL gemstone varieties and colors directly (no category)
@@ -1263,7 +1916,7 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
         'Synthetic Diamond', 'Synthetic Ruby', 'Synthetic Sapphire', 'Synthetic Spinel', 'Synthetic Quartz',
         'Synthetic Emerald', 'Synthetic Alexandrite', 'Synthetic Moissanite', 'Synthetic Aquamarine', 'Synthetic Topaz',
         'Synthetic Opal', 'Synthetic Jadeite', 'Synthetic Lapis Lazuli', 'Synthetic Turquoise', 'Synthetic Malachite',
-        'Cubic Zirconia', 'Opalite', 'Swarovski Crystal', 'Bismuth Crystal', 'Glass Gemstones', 'Goldstone', 'Paste',
+        'Cubic Zirconia', 'Opalite', 'Swarovski Crystal', 'Bismuth Crystal', 'Glass Gemstones', 'Goldstone',
         // Extended Natural
         'Amblygonite', 'Andalusite', 'Axinite', 'Azurite', 'Austrophyllite', 'Beryl (RARE types)', 'Brookite', 'Cassiterite',
         'Charoite', 'Chrysocolla', 'Clinohumite', 'Diaspore (Zultanite)', 'Dioptase', 'Dravite', 'Ekanite', 'Enstatite',
@@ -1444,9 +2097,6 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
           'Bismuth Crystal',
           'Glass Gemstones',
           'Goldstone',
-          'Paste',
-          'YAG',
-          'GGG',
           'Lab-Created Garnet',
           'Neoceram',
           'Glass-filled Gems',
@@ -1822,12 +2472,22 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
 
   // Reset category start index when feature changes
   const handleFeatureChange = (featureId) => {
+    // Save current selection before switching
+    const currentFeatureKey = `${activeFeature}:${activeCategory || 'default'}`
+    if (configState.selectedColorName) {
+      featureColorsRef.current[currentFeatureKey] = {
+        colorName: configState.selectedColorName,
+        gridItem: selectedGridItem,
+        gem: selectedGem
+      }
+    }
+    
     setActiveFeature(featureId)
     setCategoryStartIndex(0)
-    setSelectedGridItem(null)
+    // Don't clear selectedGridItem or selectedColorName - they will be restored by useEffect
     setSelectedMaterial(null)
     setShowColorPicker(false)
-    setSelectedGem({ category: 'Precious', itemIndex: null, gemName: null })
+    // Don't clear selectedGem - it will be restored if it exists for this feature
     // Get categories for the new feature
     const getNewCategories = () => {
       switch (featureId) {
@@ -1865,26 +2525,51 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
 
   // Handle tab changes - reset feature and category
   const handleTabChange = (tab) => {
+    // Save current selection before switching
+    // For Gems, use 'Gems:default' for all categories
+    const currentFeatureKey = (activeFeature === 'Gems') 
+      ? 'Gems:default' 
+      : `${activeFeature}:${activeCategory || 'default'}`
+    if (configState.selectedColorName) {
+      featureColorsRef.current[currentFeatureKey] = {
+        colorName: configState.selectedColorName,
+        gridItem: selectedGridItem,
+        gem: selectedGem
+      }
+    }
+    
     setActiveTab(tab)
     setCategoryStartIndex(0)
-    setSelectedGridItem(null)
+    // Don't clear selectedGridItem or selectedColorName - they will be restored by useEffect
     setSelectedMaterial(null)
     setShowColorPicker(false)
     if (tab === 'Form') {
       setActiveFeature('Sole/Strap')
       setActiveCategory('Insole/Instrap/Micro Hardware')
     } else {
+      // When switching to Adornment tab, preserve the current category if already on Gems
+      // Otherwise, default to 'Precious'
+      if (activeFeature === 'Gems' && activeCategory) {
+        // Already on Gems - keep current category
+        setActiveFeature('Gems')
+        setActiveCategory(activeCategory)
+      } else {
+        // Switching to Gems from another feature - default to 'Precious'
       setActiveFeature('Gems')
       setActiveCategory('Precious')
+      }
     }
   }
 
   // Reset when category changes
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
-    setSelectedGridItem(null)
+    // Don't clear selectedGridItem here - let the useEffect handle restoration
+    // The useEffect will restore the saved selection if it exists
     setSelectedMaterial(null)
     setShowColorPicker(false)
+    // Don't clear gem selection here - let the useEffect handle restoration
+    // The useEffect will restore the saved gem selection if it exists
   }
 
   // Check if there's more content to scroll
@@ -2067,7 +2752,8 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
                 const itemName = typeof item === 'object' && item.color ? item.color : item
                 const isFamilyStart = typeof item === 'object' && item.isFamilyStart ? item.isFamilyStart : false
                 const isGem = activeFeature === 'Gems' && ['Precious', 'Semi-Precious', 'Organic Gems', 'Man-Made', 'Extended Natural'].includes(activeCategory)
-                const gemImagePath = isGem ? getGemImagePath(itemName) : null
+                const isSpecialEffect = activeFeature === 'Gems' && activeCategory === 'Special Effects'
+                const gemImagePath = (isGem || isSpecialEffect) ? getGemImagePath(itemName) : null
                 const isSoleStrap = activeFeature === 'Sole/Strap' && ['Insole/Instrap/Micro Hardware', 'Outsole/Outstrap'].includes(activeCategory)
                 // Special Effects and Colour Families should display as regular cards, not color swatches
                 const isSpecialCategory = activeCategory === 'Special Effects' || activeCategory === 'Colour Families' || activeCategory === 'Textures'
@@ -2078,62 +2764,132 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
                 return (
                   <div
                     key={index}
-                    className={`grid-item ${selectedGridItem === index ? 'active' : ''} ${isGem ? 'gem-item' : ''} ${isFamilyStart ? 'family-start' : ''}`}
+                    className={`grid-item ${(selectedGridItem === index) ? 'active' : ''} ${(isGem || isSpecialEffect) ? 'gem-item' : ''} ${isFamilyStart ? 'family-start' : ''}`}
                     onClick={() => {
                       if (activeFeature === 'Gems' && !shouldShowColors() && !isSpecialCategory) {
                         // Gem selection - store gem name and show colors (but not for Special Effects, Colour Families, or Textures)
                         const gemName = itemName
+                        handleCardClick(() => {
                         setSelectedGem({ category: activeCategory, itemIndex: index, gemName: gemName })
                         setSelectedGridItem(index)
                         // Clear previous color selection when selecting a new gem
                         updateConfigState({ selectedColorName: null })
+                        })
                       } else if (activeFeature === 'Gems' && shouldShowColors()) {
                         // Color selection for gem
+                        // For Gems, use a single key for all categories - one color applies to all gem categories
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature - use 'Gems:default' for all categories
+                          const featureKey = 'Gems:default'
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
                         // Here you would apply the color to the selected gem
+                        })
                       } else if (activeFeature === 'Color' && shouldShowColors()) {
                         // Color selection for gem
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
                         // Here you would apply the color to the selected gem
+                        })
                       } else if (activeFeature === 'Material & Structure' && shouldShowColors()) {
                         // Color selection for material
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
                         // Here you would apply the color to the selected material
+                        })
                       } else if (activeFeature === 'Material & Structure' && ['Base', 'Finish', 'Textiles'].includes(activeCategory)) {
                         // Material/texture selection - show color picker
+                        handleCardClick(() => {
                         setSelectedMaterial(itemName)
                         setSelectedGridItem(index)
                         setShowColorPicker(true)
+                        })
                       } else if (activeFeature === 'Heel' && !shouldShowColors()) {
                         // Heel material selection - show color picker
+                        handleCardClick(() => {
                         setSelectedMaterial(itemName)
                         setSelectedGridItem(index)
                         setShowColorPicker(true)
+                        })
                       } else if (activeFeature === 'Heel' && shouldShowColors()) {
                         // Color selection for Heel material
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
                         // Here you would apply the color to the selected material
+                        })
                       } else if (isSoleStrap) {
                         // Sole/Strap color selection
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
+                        })
                       } else if (activeFeature === 'Crown' || activeFeature === 'Cascade') {
                         // Crown and Cascade - treat selections as gemstone materials/colors
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
+                        })
                       } else {
                         // Default: apply selection as color/material
+                        handleCardClick(() => {
                         setSelectedGridItem(index)
                         updateConfigState({ selectedColorName: itemName })
+                          // Save this selection for this feature
+                          const featureKey = `${activeFeature}:${activeCategory || 'default'}`
+                          featureColorsRef.current[featureKey] = {
+                            colorName: itemName,
+                            gridItem: index,
+                            gem: selectedGem
+                          }
+                        })
                       }
                     }}
                     style={
-                      isColorDisplay ? {
-                        // Show color swatch for color items
+                      isColorDisplay && !(activeFeature === 'Gems' && shouldShowColors()) ? {
+                        // Show color swatch for color items (but not for gem colors - they use SVG)
                         background: `linear-gradient(135deg, ${activeFeature === 'Heel' ? getMetalColorHex(itemName) : getColorHex(itemName)} 0%, ${activeFeature === 'Heel' ? getMetalColorHex(itemName) : getColorHex(itemName)} 100%)`,
                         backgroundSize: 'cover'
                       } : {}
@@ -2141,6 +2897,66 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
                   >
                     {isColorDisplay ? (
                       <>
+                        {/* Use SVG with modified fill colors for all gem colors */}
+                        {activeFeature === 'Gems' && shouldShowColors() ? (
+                          <div className="color-swatch-container" style={{ background: 'transparent', position: 'relative', zIndex: 2, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div 
+                              className="color-swatch-3d"
+                              style={{ 
+                                width: '100%', 
+                                height: '100%', 
+                                borderRadius: '8px',
+                                background: 'transparent',
+                                position: 'relative',
+                                overflow: 'visible',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 2,
+                                minHeight: '100%',
+                                minWidth: '100%'
+                              }}
+                            >
+                              {/* Render modified SVG with fill colors */}
+                              {getModifiedSVG(itemName) ? (
+                                <div
+                                  dangerouslySetInnerHTML={{ __html: getModifiedSVG(itemName) }}
+                                  className="gem-color-svg"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    position: 'relative',
+                                    zIndex: 3,
+                                    pointerEvents: 'none',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    opacity: 1,
+                                    backgroundColor: 'transparent',
+                                    filter: (selectedGridItem !== null && selectedGridItem !== undefined && selectedGridItem === index)
+                                      ? 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 16px rgba(255, 254, 136, 0.4))'
+                                      : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
+                                  }}
+                                />
+                              ) : (
+                                // Fallback: show solid color if SVG not loaded
+                                <div style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  backgroundColor: getColorHex(itemName) || '#000000',
+                                  borderRadius: '8px',
+                                  zIndex: 3,
+                                  opacity: 1,
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0
+                                }} />
+                              )}
+                            </div>
+                          </div>
+                        ) : (
                         <div className="color-swatch-container">
                       <div 
                         className="color-swatch-3d"
@@ -2149,16 +2965,17 @@ function ConfigurationPanel({ configState = {}, updateConfigState = () => {} }) 
                           height: '100%', 
                           borderRadius: activeFeature === 'Color' ? '10px' : '8px',
                               backgroundColor: activeFeature === 'Heel' ? getMetalColorHex(itemName) : getColorHex(itemName),
-                          border: selectedGridItem === index ? '2px solid #fffe88' : 'none',
-                          boxShadow: selectedGridItem === index 
+                                border: (selectedGridItem !== null && selectedGridItem !== undefined && selectedGridItem === index) ? '2px solid #fffe88' : 'none',
+                                boxShadow: (selectedGridItem !== null && selectedGridItem !== undefined && selectedGridItem === index)
                             ? '0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 254, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                             : '0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
                         }}
                       ></div>
                         </div>
+                        )}
                         <span className="color-name-overlay">{itemName}</span>
                       </>
-                    ) : isGem && gemImagePath ? (
+                    ) : (isGem || isSpecialEffect) && gemImagePath ? (
                       <div className="gem-image-container">
                         <img 
                           src={gemImagePath} 

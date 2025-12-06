@@ -9,13 +9,13 @@ function Configurator() {
   const [configState, setConfigState] = useState({
     activeTab: 'Adornment',
     activeFeature: 'Gems',
-    activeCategory: 'Precious',
-    selectedGridItem: null,
-    selectedColorName: 'Sapphire', // Default gem color (sapphire blue)
+    activeCategory: 'Semi-Precious', // Default to Semi-Precious for beautiful initial display
+    selectedGridItem: 0, // Agate is at index 0 in Semi-Precious category - shows active border
+    selectedColorName: 'Red', // Default color for Agate gem - kept for active border when colors are shown
     sliderValue: 50,
-    selectedGem: { category: 'Precious', itemIndex: null, gemName: 'Sapphire' }, // Default gem selection
+    selectedGem: { category: 'Semi-Precious', itemIndex: 0, gemName: null }, // gemName is null initially to show gems grid, but itemIndex keeps active border
     selectedMaterial: null,
-    showColorPicker: false,
+    showColorPicker: false, // Don't show color picker initially - show gems grid
   })
 
   // Handler to update config state from ConfigurationPanel
